@@ -1,0 +1,206 @@
+{% extends 'backoffice/base_admin.html.twig' %}
+
+{% block title %}{{ parent() }} Mise à jour utilisation des imprimés {% endblock %}
+
+{% set menu_imprime_tech_use      = true %}
+{% set menu_imprime_tech_use_list = true %}
+
+{%- block choice_widget_collapsed -%}
+    {%- if required and placeholder is none and not placeholder_in_choices and not multiple -%}
+        {% set required = false %}
+    {%- endif -%}
+    <span>
+        <select class="select2" data-placeholder="Choisir" style="width: 100%;" oninvalid="setErrorClass($(this));"
+                {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {%- if placeholder is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>
+                    {{ placeholder != '' ? placeholder|trans({}, translation_domain) }}
+                </option>
+            {%- endif -%}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('choice_widget_options') -}}
+                {%- if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif -%}
+            {%- endif -%}
+            {%- set options = choices -%}
+            {{- block('choice_widget_options') -}}
+        </select>
+    </span>
+{%- endblock choice_widget_collapsed -%}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('warning') %}
+        <div class="callout callout-warning">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    {# {% if message != "" %}
+        <div class="{% if statu == 'success' %}callout callout-success{% endif %}">
+            {{ message }}
+        </div>
+    {% endif %} #}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-primary kl-bloc-visite">
+                <div class="box-header">
+                    <h3 class="box-title">Mise à jour utilisation des imprimés </h3>
+                </div>
+
+                <div class="box-body">
+                    <form id="uit_form" action="{{ path('imprime_tech_use_new') }}" method="POST">
+                        <div class="modal-body">
+                            <!-- Année -->
+                            {# <div class="row">
+                                <div class="form-group" style="margin: 0 8px 0 8px; padding:  0 8px 0 8px;">
+                                    <label for="ct_uit_date">Sélectionner la date</label>
+                                    <input id="ct_uit_date" name="ct_uit_date" class="form-control datepicker"
+                                        value="{{ "now"|date("d/m/Y") }}" required />
+                                </div>
+                            </div> #}
+
+                            <!-- Centre -->
+                            <div class="{% if app.user.ctRole.id != constant('Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_SUPERADMIN') and app.user.ctRole.id != constant('Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_APPROVISIONNEMENT') %}hidden{% endif %}">
+                                <div class="row">
+                                    <div class="form-group" style="margin: 0 8px 0 8px; padding:  0 8px 0 8px;">
+                                        <label for="ct_uit_centre">Sélectionner le centre</label>
+                                        <select id="ct_uit_centre" name="ct_uit_centre" class="form-control select2"
+                                            style="width: 100%;" data-placeholder="Choisir" {# required #}>
+                                            <option value="" selected="selected">
+                                                Choisir
+                                            </option>
+                                            {% for province in provinces %}
+                                            <optgroup label="{{ province.prvNom }}">
+                                                {% for centre in centres %}
+                                                    {# {% if province.id == centre.ctProvince.id %} #}
+                                                        <option value="{{ centre.id }}">
+                                                            {{ centre.ctrNom|upper }}
+                                                        </option>
+                                                    {# {% endif %} #}
+                                                {% endfor %}
+                                            </optgroup>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Motid d'utilisation -->
+                            <div class="row">
+                                <div class="form-group" style="margin: 0 8px 0 8px; padding:  0 8px 0 8px;">
+                                    <label for="ct_uit_motif">Séléctionner le motif d'utilisation </label>
+                                    <select id="ct_uit_motif" name="ct_uit_motif" class="form-control select2 mx-6"
+                                        style="width: 100%;" data-placeholder="  Choisir" required >
+                                        <option value="" selected="selected">
+                                            Choisir
+                                        </option>
+                                        <option value="Authenticité">Authenticité</option>
+                                        <option value="Autres">Autres</option>
+                                        <option value="Caractéristique">Caractéristique</option>
+                                        <option value="Constatation">Constatation</option>
+                                        <option value="Contre">Contre</option>
+                                        <option value="Duplicata" disabled >Duplicata</option>
+                                        <option value="Duplicata visite">Duplicata visite</option>
+                                        <option value="Duplicata réception">Duplicata réception</option>
+                                        <option value="Mutation">Mutation</option>
+                                        <option value="Rebut">Rebut</option>
+                                        <option value="Réception">Réception</option>
+                                        <option value="Visite">Visite</option>
+                                        <option value="Spéciale">Spéciale</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Contrôles techniques -->
+                            <div class="row">
+                                <div class="form-group" style="margin: 0 8px 0 8px; padding:  0 8px 0 8px;">
+                                    <label for="ct_controle_id">Séléctionner le N° de contrôle ou d'enregistrement </label>
+                                    <select id="ct_controle_id" name="ct_controle_id" class="form-control select2 mx-6"
+                                        style="width: 100%;" data-placeholder="  Choisir" required >
+                                        <option value="" selected="selected">
+                                            Choisir
+                                        </option>
+                                        <optgroup label="Visites">
+                                            {% for visite in visites %}
+                                                <option value="{{ visite.id }}">
+                                                    {{ visite.id|upper }}
+                                                </option>
+                                            {% endfor %}
+                                        </optgroup>
+                                        <optgroup label="Réceptions">
+                                        </optgroup>
+                                        <optgroup label="Constatations">
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Imprimés techniques -->
+                            <div class="row">
+                                <div class="form-group" style="margin: 0 8px 0 8px; padding:  0 8px 0 8px;">
+                                    <label for="ct_imprime_tech_use_id">Séléctionner les N° imprimés utilisés</label>
+                                    <select id="ct_imprime_tech_use_id" name="ct_imprime_tech_use_id[]" class="form-control select2 mx-6"
+                                        style="width: 100%;" data-placeholder="  Choisir" multiple="" required >
+                                        {% for imprime in imprimes %}
+                                        <optgroup label="{{ imprime.nomImprimeTech|upper }}">
+                                            {% for used_it in useds_it %}
+                                                {% if imprime.id == used_it.ctImprimeTech.id %}
+                                                {# {% set counter = ( counter | default(0) ) + 1 %} #}
+                                                {# {% if counter <= 20 %} #}
+                                                <option value="{{ used_it.id }}">
+                                                    {{ used_it.ituNumero|upper }}
+                                                </option>
+                                                {# {% endif %} #}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="box-body">
+                                        <div class="form-group" style="margin: 0 0 8px 0; padding: 0 0 8px 0;">
+                                            {# <input type="submit" class="btn btn-primary" value="Enregistrer" name="save_used_it"/> #}
+                                            <button type="submit" class="btn btn-primary" name="save_used_it">
+                                                Enregistrer
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Mise à jour multiple d'utilisation IT -->
+    <!-- JQuery UI -->
+    <script>
+        var _senddata_new_utilisation_it_ajax = "{{ path('imprime_tech_use_new') }}";
+    </script>
+    <script src="{{ asset('plugins/jquery-ui-1.12.1/jquery-ui.js') }}" ></script>
+{% endblock %}

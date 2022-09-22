@@ -1,0 +1,16 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: localhost
+    database_port: null
+    database_name: controle_technique
+    database_user: root
+    database_password: dgsrmysql2022
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    secret: ThisTokenIsNotSoSecretChangeIt
+    libreoffice_linux_path: '/usr/bin/libreoffice --headless -env:UserInstallation=file:///tmp --convert-to pdf'
+    libreoffice_mac_path: '/Applications/LibreOffice.app/Contents/MacOS/soffice  --headless --convert-to pdf'
+    libreoffice_win_path: '"C:\Program Files\LibreOffice\program\soffice.exe" --headless --convert-to pdf'
+    lo_path: '%libreoffice_win_path%'

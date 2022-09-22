@@ -1,0 +1,79 @@
+imprime_tech_use_index:
+    path:     /
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:index" }
+    methods:  GET
+
+imprime_tech_use_new:
+    path:     /new
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:new" }
+    methods:  [GET, POST]
+
+imprime_tech_use_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:edit" }
+    methods:  [GET, POST]
+
+imprime_tech_use_update:
+    path:     /{id}/update
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:update" }
+    methods:  [POST, PUT]
+
+imprime_tech_use_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:delete" }
+    methods:  [GET, DELETE]
+
+imprime_tech_use_reset:
+    path:     /{id}/reset
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:reset" }
+    methods:  [GET, PUT]
+
+imprime_tech_use_delete_group:
+    path:     /delete-group
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:deleteGroup" }
+    methods:  POST
+
+imprime_tech_use_search:
+    path:     /search
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:search" }
+    methods:  [GET, POST]
+
+imprime_tech_use_show_numero_it_ajax:
+    path:     /show-numero-it-ajax
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:showNumeroITAjax" }
+    methods:  POST
+
+imprimes_tech_generate_used_ajax:
+    path:     /generer-feuille-it-ajax
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:generateFeuilleUsedIT" }
+    methods:  [GET, POST]
+
+imprimes_tech_stock_generate_ajax:
+    path:     /generer-feuille-stock-it-ajax
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:generateFeuilleStockIT" }
+    methods:  [GET, POST]
+
+imprimes_tech_new_stock_generate_ajax:
+    path:     /generer-new-feuille-stock-it-ajax
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:generateNewFeuilleStockIT" }
+    methods:  [GET, POST]
+
+imprimes_tech_use_statistic:
+    path:     /stat
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:statisticITUse" }
+    methods:  GET
+
+imprimes_tech_use_statistic_generate_reporting:
+    path:     /generate-reporting-use-imprimes-tech
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:generateReportingStatisticITUse" }
+    methods:  [GET, POST]
+
+imprimes_tech_test_ct_controle_ajax:
+    path: /controle-is-your-controle-ajax
+    defaults: {_controller: "AdminBundle:CtImprimeTechUse:getAllControleNoInImprimeTechUse" }
+    methods: [GET, POST]
+
+generate_new_feuille_de_caisse:
+    path:     /generer-new-feuille-de-caisse
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:generateNewFeuilleCaisse" }
+    methods:  [GET, POST]
