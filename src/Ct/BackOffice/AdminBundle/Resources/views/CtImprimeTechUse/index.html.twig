@@ -22,11 +22,11 @@
         </div>
     {% endfor %}
 
-    {# {% for key, messages in app.session.flashbag.all() %}
+    {% for key, messages in app.session.flashbag.all() %}
         <div class="callout callout-{{ key }}">
             {{ messages }} <br />
         </div>
-    {% endfor %} #}
+    {% endfor %}
 
     <div class="row">
         <div class="col-md-6">
@@ -80,16 +80,38 @@
                                         Générer
                                     </button>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-5">
                                     <span class="pull-left" id="link-download-utilisation-it"></span>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="box box-warning">
+
+                                        <div class="col-md-6">
+                                            <a href="{{ path('imprime_tech_use_search') }}"
+                                                class="btn btn-default pull-left btn-mini-rectif" >
+                                                Retour à la rechercher
+                                            </a>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <a href="{{ path('imprime_tech_use_new') }}"
+                                                class="btn btn-light pull-left btn-mini-rectif" >
+                                                Retour à l'ajout multiple
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
+        
 {#         <div class="col-md-4">
             <div class="box box-primary kl-bloc-visite">
                 <div class="box-header">
@@ -205,11 +227,13 @@
                                 <div class="col-md-5">
                                     <span class="pull-left" id="link-download-new-stock-it"></span>
                                 </div>
+
                             </div>
 
                         </div>
                     </form>
                 </div>
+
             </div>
             {# <div class="box box-danger kl-bloc-visite">
                 <div class="box-body bg-danger table-responsive">
@@ -269,6 +293,7 @@
             </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block javascripts %}

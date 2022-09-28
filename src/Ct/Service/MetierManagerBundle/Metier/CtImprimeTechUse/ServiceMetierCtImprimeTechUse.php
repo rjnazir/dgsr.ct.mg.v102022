@@ -2306,4 +2306,43 @@ class ServiceMetierCtImprimeTechUse
         
         return $_controle_id;
     }
+
+    
+    /**
+     * Récuperer tout les visites par centre à une date et non enregistrés dans utilisations IT
+     * @param   $_ct_centre_id : ID du centre de traitement
+     * @return  array   : Liste des ID de visites recupérées
+     */
+    public function getAllControlesByCentreAndDateNotInUIT($_centre_id, $_entity)
+    {
+        $_date = new \DateTime();
+        $_date = $_date->format('Y-m-d');
+        $_entity_visite = EntityName::CT_VISITE;
+        $_entity_reception = EntityName::CT_RECEPTION;
+        $_entity_constatation = EntityName::CT_CONST_AV_DED;
+        $_entity_usedit = EntityName::CT_IMPRIME_TECH_USE;
+        if($_entity == 'Visite'){
+            $_dql = "SELECT v FROM $_entity_visite v LEFT JOIN $_entity_usedit u WITH v.id = u.ctControle
+                    WHERE   v.vstCreated LIKE :date
+                            AND v.ctCentre = :centre
+                            AND u.ctControle IS NULL
+                    ORDER BY v.id DESC";
+        }else if($_entity == 'Réception'){
+            $_dql = "SELECT r FROM $_entity_reception r LEFT JOIN $_entity_usedit u WITH r.id = u.ctControle
+                    WHERE   r.rcpCreated LIKE :date
+                            AND r.ctCentre = :centre
+                            AND u.ctControle IS NULL
+                    ORDER BY r.id DESC";
+        }else if($_entity == 'Constatation'){
+            $_dql = "SELECT c FROM $_entity_constatation c LEFT JOIN $_entity_usedit u WITH c.id = u.ctControle
+                    WHERE   c.cadCreated LIKE :date
+                            AND c.ctCentre = :centre
+                            AND u.ctControle IS NULL
+                    ORDER BY c.id DESC";
+        }
+        $_query = $this->_entity_manager->createQuery($_dql);
+        $_query->setParameter('centre'  , $_centre_id);
+        $_query->setParameter('date'    , $_date.'%');
+        return $_query->getResult();
+    }
 }

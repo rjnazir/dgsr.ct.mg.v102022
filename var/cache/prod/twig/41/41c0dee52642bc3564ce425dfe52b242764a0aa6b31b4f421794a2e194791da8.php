@@ -95,8 +95,27 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
         // line 24
         echo "
     ";
+        // line 25
+        $context['_parent'] = $context;
+        $context['_seq'] = twig_ensure_traversable($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? null), "session", array()), "flashbag", array()), "all", array(), "method"));
+        foreach ($context['_seq'] as $context["key"] => $context["messages"]) {
+            // line 26
+            echo "        <div class=\"callout callout-";
+            echo twig_escape_filter($this->env, $context["key"], "html", null, true);
+            echo "\">
+            ";
+            // line 27
+            echo twig_escape_filter($this->env, $context["messages"], "html", null, true);
+            echo " <br />
+        </div>
+    ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['key'], $context['messages'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
         // line 30
-        echo "    <div class=\"row\">
+        echo "
+    <div class=\"row\">
         <div class=\"col-md-6\">
             <div class=\"box box-primary kl-bloc-visite\">
                 <div class=\"box-header\">
@@ -113,7 +132,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                                     <label for=\"ct_fitu_date\">Sélectionner la date</label>
                                     <input required id=\"ct_fitu_date\" name=\"ct_fitu_date\" class=\"form-control datepicker\"
                                            value=\"";
-        // line 46
+        // line 47
         echo twig_escape_filter($this->env, twig_date_format_filter($this->env, "now", "d/m/Y"), "html", null, true);
         echo "\" />
                                 </div>
@@ -121,7 +140,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
 
                             <!-- Centre -->
                             <div class=\"";
-        // line 51
+        // line 52
         if ((($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? null), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_SUPERADMIN")) && ($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? null), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_APPROVISIONNEMENT")))) {
             echo "hidden";
         }
@@ -135,45 +154,45 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                                                 Choisir
                                             </option>
                                             ";
-        // line 60
+        // line 61
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["provinces"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["province"]) {
-            // line 61
+            // line 62
             echo "                                            <optgroup label=\"";
             echo twig_escape_filter($this->env, $this->getAttribute($context["province"], "prvNom", array()), "html", null, true);
             echo "\">
                                                 ";
-            // line 62
+            // line 63
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable(($context["centres"] ?? null));
             foreach ($context['_seq'] as $context["_key"] => $context["centre"]) {
-                // line 63
-                echo "                                                    ";
                 // line 64
+                echo "                                                    ";
+                // line 65
                 echo "                                                        <option value=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "id", array()), "html", null, true);
                 echo "\">
                                                             ";
-                // line 65
+                // line 66
                 echo twig_escape_filter($this->env, twig_upper_filter($this->env, $this->getAttribute($context["centre"], "ctrNom", array())), "html", null, true);
                 echo "
                                                         </option>
                                                     ";
-                // line 68
+                // line 69
                 echo "                                                ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['centre'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 69
+            // line 70
             echo "                                            </optgroup>
                                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['province'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 71
+        // line 72
         echo "                                        </select>
                                     </div>
                                 </div>
@@ -185,18 +204,46 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                                         Générer
                                     </button>
                                 </div>
-                                <div class=\"col-md-3\">
+                                <div class=\"col-md-5\">
                                     <span class=\"pull-left\" id=\"link-download-utilisation-it\"></span>
                                 </div>
                             </div>
+
+                            <div class=\"row\">
+                                <div class=\"col-md-12\">
+                                    <div class=\"box box-warning\">
+
+                                        <div class=\"col-md-6\">
+                                            <a href=\"";
+        // line 93
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_search");
+        echo "\"
+                                                class=\"btn btn-default pull-left btn-mini-rectif\" >
+                                                Retour à la rechercher
+                                            </a>
+                                        </div>
+                                        
+                                        <div class=\"col-md-6\">
+                                            <a href=\"";
+        // line 100
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_new");
+        echo "\"
+                                                class=\"btn btn-light pull-left btn-mini-rectif\" >
+                                                Retour à l'ajout multiple
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
+        
 ";
-        // line 152
+        // line 175
         echo "
         <div class=\"col-md-6\">
             <div class=\"box box-primary kl-bloc-visite\">
@@ -218,7 +265,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
 
                             <!-- Centre -->
                             <div class=\"";
-        // line 172
+        // line 195
         if ((($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? null), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_SUPERADMIN")) && ($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? null), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_APPROVISIONNEMENT")))) {
             echo "hidden";
         }
@@ -232,45 +279,45 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                                                 Choisir
                                             </option>
                                             ";
-        // line 181
+        // line 204
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["provinces"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["province"]) {
-            // line 182
+            // line 205
             echo "                                            <optgroup label=\"";
             echo twig_escape_filter($this->env, $this->getAttribute($context["province"], "prvNom", array()), "html", null, true);
             echo "\">
                                                 ";
-            // line 183
+            // line 206
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable(($context["centres"] ?? null));
             foreach ($context['_seq'] as $context["_key"] => $context["centre"]) {
-                // line 184
+                // line 207
                 echo "                                                    ";
-                // line 185
+                // line 208
                 echo "                                                        <option value=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "id", array()), "html", null, true);
                 echo "\">
                                                             ";
-                // line 186
+                // line 209
                 echo twig_escape_filter($this->env, twig_upper_filter($this->env, $this->getAttribute($context["centre"], "ctrNom", array())), "html", null, true);
                 echo "
                                                         </option>
                                                     ";
-                // line 189
+                // line 212
                 echo "                                                ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['centre'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 190
+            // line 213
             echo "                                            </optgroup>
                                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['province'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 192
+        // line 215
         echo "                                        </select>
                                     </div>
                                 </div>
@@ -286,14 +333,16 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                                 <div class=\"col-md-5\">
                                     <span class=\"pull-left\" id=\"link-download-new-stock-it\"></span>
                                 </div>
+
                             </div>
 
                         </div>
                     </form>
                 </div>
+
             </div>
             ";
-        // line 220
+        // line 245
         echo "        </div>
     </div>
 
@@ -322,38 +371,38 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                             </thead>
                             <tbody>
                             ";
-        // line 247
+        // line 272
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["itu_listes"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["itu_liste"]) {
-            // line 248
+            // line 273
             echo "                                <tr>
                                     <td>
                                         <input type=\"checkbox\" value=\"";
-            // line 250
+            // line 275
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "id", array()), "html", null, true);
             echo "\" name=\"delete[]\" />
                                     </td>
                                     <td>";
-            // line 252
+            // line 277
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ctControle", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 253
+            // line 278
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ituNumero", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 254
+            // line 279
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($context["itu_liste"], "ctImprimeTech", array()), "nomImprimeTech", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 255
+            // line 280
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ituMotifUsed", array()), "html", null, true);
             echo "</td>
                                     <td>
                                         <a class=\"btn btn-primary\" title=\"Modifier\"
                                            href=\"";
-            // line 258
+            // line 283
             echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_edit", array("id" => $this->getAttribute($context["itu_liste"], "id", array()))), "html", null, true);
             echo "\">
                                             <i class=\"fa fa-edit\"></i>
@@ -365,7 +414,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['itu_liste'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 264
+        // line 289
         echo "                            </tbody>
                         </table>
                     </div>
@@ -373,13 +422,14 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
             </div>
         </div>
     </div>
+
 ";
     }
 
-    // line 273
+    // line 299
     public function block_javascripts($context, array $blocks = array())
     {
-        // line 274
+        // line 300
         echo "    ";
         $this->displayParentBlock("javascripts", $context, $blocks);
         echo "
@@ -387,7 +437,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
     <!-- Vérification existence carte grise -->
     <!-- JQuery UI -->
     <script src=\"";
-        // line 278
+        // line 304
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("plugins/jquery-ui-1.12.1/jquery-ui.js"), "html", null, true);
         echo "\" ></script>
     <script type=\"text/javascript\">
@@ -425,20 +475,20 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
         });
 
         var _generate_used_it_ajax_uri = \"";
-        // line 313
+        // line 339
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_generate_used_ajax");
         echo "\";
         var _generate_stock_it_ajax_uri = \"";
-        // line 314
+        // line 340
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_stock_generate_ajax");
         echo "\";
         var _generate_new_stok_it_ajax_uri = \"";
-        // line 315
+        // line 341
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_new_stock_generate_ajax");
         echo "\";
     </script>
     <script src=\"";
-        // line 317
+        // line 343
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("backoffice/js/index.imprimes.js"), "html", null, true);
         echo "\"></script>
 ";
@@ -456,7 +506,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
 
     public function getDebugInfo()
     {
-        return array (  442 => 317,  437 => 315,  433 => 314,  429 => 313,  391 => 278,  383 => 274,  380 => 273,  369 => 264,  357 => 258,  351 => 255,  347 => 254,  343 => 253,  339 => 252,  334 => 250,  330 => 248,  326 => 247,  297 => 220,  274 => 192,  267 => 190,  261 => 189,  256 => 186,  251 => 185,  249 => 184,  245 => 183,  240 => 182,  236 => 181,  222 => 172,  200 => 152,  177 => 71,  170 => 69,  164 => 68,  159 => 65,  154 => 64,  152 => 63,  148 => 62,  143 => 61,  139 => 60,  125 => 51,  117 => 46,  99 => 30,  96 => 24,  87 => 21,  84 => 20,  79 => 19,  70 => 16,  67 => 15,  62 => 14,  53 => 11,  50 => 10,  45 => 9,  42 => 8,  35 => 3,  31 => 1,  29 => 6,  27 => 5,  11 => 1,);
+        return array (  492 => 343,  487 => 341,  483 => 340,  479 => 339,  441 => 304,  433 => 300,  430 => 299,  418 => 289,  406 => 283,  400 => 280,  396 => 279,  392 => 278,  388 => 277,  383 => 275,  379 => 273,  375 => 272,  346 => 245,  321 => 215,  314 => 213,  308 => 212,  303 => 209,  298 => 208,  296 => 207,  292 => 206,  287 => 205,  283 => 204,  269 => 195,  247 => 175,  229 => 100,  219 => 93,  196 => 72,  189 => 70,  183 => 69,  178 => 66,  173 => 65,  171 => 64,  167 => 63,  162 => 62,  158 => 61,  144 => 52,  136 => 47,  117 => 30,  108 => 27,  103 => 26,  99 => 25,  96 => 24,  87 => 21,  84 => 20,  79 => 19,  70 => 16,  67 => 15,  62 => 14,  53 => 11,  50 => 10,  45 => 9,  42 => 8,  35 => 3,  31 => 1,  29 => 6,  27 => 5,  11 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */

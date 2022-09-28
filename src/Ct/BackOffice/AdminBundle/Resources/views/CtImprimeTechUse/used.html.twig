@@ -47,12 +47,6 @@
         </div>
     {% endfor %}
 
-    {# {% if message != "" %}
-        <div class="{% if statu == 'success' %}callout callout-success{% endif %}">
-            {{ message }}
-        </div>
-    {% endif %} #}
-
     <div class="row">
         <div class="col-md-6">
             <div class="box box-primary kl-bloc-visite">
@@ -63,6 +57,7 @@
                 <div class="box-body">
                     <form id="uit_form" action="{{ path('imprime_tech_use_new') }}" method="POST">
                         <div class="modal-body">
+
                             <!-- Année -->
                             {# <div class="row">
                                 <div class="form-group" style="margin: 0 8px 0 8px; padding:  0 8px 0 8px;">
@@ -141,8 +136,18 @@
                                             {% endfor %}
                                         </optgroup>
                                         <optgroup label="Réceptions">
+                                            {% for reception in receptions %}
+                                                <option value="{{ reception.id }}">
+                                                    {{ reception.id|upper }}
+                                                </option>
+                                            {% endfor %}
                                         </optgroup>
                                         <optgroup label="Constatations">
+                                            {% for constatation in constatations %}
+                                                <option value="{{ constatation.id }}">
+                                                    {{ constatation.id|upper }}
+                                                </option>
+                                            {% endfor %}
                                         </optgroup>
                                     </select>
                                 </div>

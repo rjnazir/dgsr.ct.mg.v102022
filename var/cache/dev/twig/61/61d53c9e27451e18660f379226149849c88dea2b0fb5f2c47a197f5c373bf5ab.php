@@ -15,11 +15,11 @@ class __TwigTemplate_88739765ad204bba09e322927000703251236264c6e42e631757814f37c
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_7f39acc2914250de3f581047aa6425980b7508a542529c0e709a78fb17901c2f = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_7f39acc2914250de3f581047aa6425980b7508a542529c0e709a78fb17901c2f->enter($__internal_7f39acc2914250de3f581047aa6425980b7508a542529c0e709a78fb17901c2f_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", ":backoffice:base_admin_sidebar.html.twig"));
+        $__internal_aef3f2d20bc0caf7b01515aeadb5eeba6ddeb0e007bec6586423b806ed098a42 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_aef3f2d20bc0caf7b01515aeadb5eeba6ddeb0e007bec6586423b806ed098a42->enter($__internal_aef3f2d20bc0caf7b01515aeadb5eeba6ddeb0e007bec6586423b806ed098a42_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", ":backoffice:base_admin_sidebar.html.twig"));
 
-        $__internal_34ae48d7658f0a0412503b8723c1bf259a152926bb84abcc232e0ffee460f08a = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_34ae48d7658f0a0412503b8723c1bf259a152926bb84abcc232e0ffee460f08a->enter($__internal_34ae48d7658f0a0412503b8723c1bf259a152926bb84abcc232e0ffee460f08a_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", ":backoffice:base_admin_sidebar.html.twig"));
+        $__internal_7ea1853df77dffd8b31e6491e266209f13d811a833dd6076d479881c414670dc = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_7ea1853df77dffd8b31e6491e266209f13d811a833dd6076d479881c414670dc->enter($__internal_7ea1853df77dffd8b31e6491e266209f13d811a833dd6076d479881c414670dc_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", ":backoffice:base_admin_sidebar.html.twig"));
 
         // line 1
         $context["active"] = "active";
@@ -2148,10 +2148,10 @@ array_key_exists("menu_visite_extra_type", $context)) || array_key_exists("menu_
 </aside>
 ";
         
-        $__internal_7f39acc2914250de3f581047aa6425980b7508a542529c0e709a78fb17901c2f->leave($__internal_7f39acc2914250de3f581047aa6425980b7508a542529c0e709a78fb17901c2f_prof);
+        $__internal_aef3f2d20bc0caf7b01515aeadb5eeba6ddeb0e007bec6586423b806ed098a42->leave($__internal_aef3f2d20bc0caf7b01515aeadb5eeba6ddeb0e007bec6586423b806ed098a42_prof);
 
         
-        $__internal_34ae48d7658f0a0412503b8723c1bf259a152926bb84abcc232e0ffee460f08a->leave($__internal_34ae48d7658f0a0412503b8723c1bf259a152926bb84abcc232e0ffee460f08a_prof);
+        $__internal_7ea1853df77dffd8b31e6491e266209f13d811a833dd6076d479881c414670dc->leave($__internal_7ea1853df77dffd8b31e6491e266209f13d811a833dd6076d479881c414670dc_prof);
 
     }
 

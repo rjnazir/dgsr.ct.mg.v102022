@@ -63,38 +63,35 @@ class CtImprimeTechUseController extends Controller
         $_imprimes      = $_em_imprimes->getAllCtImprimeTechByOrder(array('nomImprimeTech' => 'ASC'));
         $_imprimesnotused   = $_em_used_it->getAllCtImprimeTechNoUsedOrder();
         /* Récupérer tous les visites du centre non dans l'utilisation des IT */
-        $_visites       = $_em_visites->getAllVisiteByCentreAndDateNotInUIT($_centre);
-
-        // $_message       = "";
-        // $_statu         = "";
+        $_visites       = $_em_used_it->getAllControlesByCentreAndDateNotInUIT($_centre, 'Visite');
+        $_receptions    = $_em_used_it->getAllControlesByCentreAndDateNotInUIT($_centre, 'Réception');
+        $_constatations = $_em_used_it->getAllControlesByCentreAndDateNotInUIT($_centre, 'Constatation');
 
         if ($_request->getMethod() === 'POST' )
         {
-            $_data = $_request->request->all();
-            $_motif_uit = $_data['ct_uit_motif'];
-            $_controle_id = $_data['ct_controle_id'];
-            $_imprimes_id = $_data['ct_imprime_tech_use_id'];
+            $_data          = $_request->request->all();
+            $_motif_uit     = $_data['ct_uit_motif'];
+            $_controle_id   = $_data['ct_controle_id'];
+            $_imprimes_id   = $_data['ct_imprime_tech_use_id'];
             foreach($_imprimes_id as $_imprime){
-                $_used_it = $_em_used_it->getCtImprimeTechUseById($_imprime);
+                $_used_it   = $_em_used_it->getCtImprimeTechUseById($_imprime);
                 $_used_it->setCtControle($_controle_id);
                 $_used_it->setItuUsed(TRUE);
                 $_used_it->setItuMotifUsed($_motif_uit);
                 $_em_used_it->saveCtImprimeTechUse($_used_it, 'new', NULL);
-                $_em_used_it->setFlash('sucess', 'Mise à jour d\'utilisation de l\'imprimé n° '.$_used_it->getituNumero() .' effectués avec succès.');
+                $_em_used_it->setFlash('success', "La mise à jour de l'utilisation de l'imprimé technique ".$_used_it->getItuNumero()." est effectuée avec succès.");
             }
-            // $_statu    = 'sucess';
-            // $_message   = 'Mise à jour d\'utilisation des imprimés effectués avec succès.';
-            // return $this->redirect($this->generateUrl('imprime_tech_use_index'), array('statu' => $_statu, 'message' => $_message));
+            return $this->redirect($this->generateUrl('imprime_tech_use_index'));
         }
 
         return $this->render('AdminBundle:CtImprimeTechUse:used.html.twig', array(
             'centres'   => $_centres,
             'provinces' => $_provinces,
             'visites'   => $_visites,
+            'receptions'=> $_receptions,
+            'constatations'=> $_constatations,
             'imprimes'  => $_imprimes,
-            'useds_it'  => $_imprimesnotused,
-            // 'statu'     => $_statu,
-            // 'message'   => $_message,
+            'useds_it'  => $_imprimesnotused
         ));
     }
 
