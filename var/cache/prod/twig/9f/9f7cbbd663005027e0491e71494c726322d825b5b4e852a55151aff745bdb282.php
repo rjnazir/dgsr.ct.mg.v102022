@@ -234,7 +234,7 @@ class __TwigTemplate_76ff3737e57a1e91a44f3a9685ddae6cd78abee0ffa09039627fa9ad0bc
         echo "<div class=\"input-group\">
         ";
         // line 24
-        $context["append"] = (is_string($__internal_4350793515e1a141fc0b21fab170755889b590b5cd08afaffa267ddfed5a1ff2 = ($context["money_pattern"] ?? null)) && is_string($__internal_6d8173e0d3426b8513aa3b7b090dbfaaaf9156f8f2982ff69055020432dbc132 = "{{") && ('' === $__internal_6d8173e0d3426b8513aa3b7b090dbfaaaf9156f8f2982ff69055020432dbc132 || 0 === strpos($__internal_4350793515e1a141fc0b21fab170755889b590b5cd08afaffa267ddfed5a1ff2, $__internal_6d8173e0d3426b8513aa3b7b090dbfaaaf9156f8f2982ff69055020432dbc132)));
+        $context["append"] = (is_string($__internal_0bac158311d7691e6b31bf028cc659d6200a621ab30326ca54870c1bfaff8dc4 = ($context["money_pattern"] ?? null)) && is_string($__internal_f9b5892dde76c4f657519c2dfb7e6a22be453bf4194f9e4b032084a63b9d0f08 = "{{") && ('' === $__internal_f9b5892dde76c4f657519c2dfb7e6a22be453bf4194f9e4b032084a63b9d0f08 || 0 === strpos($__internal_0bac158311d7691e6b31bf028cc659d6200a621ab30326ca54870c1bfaff8dc4, $__internal_f9b5892dde76c4f657519c2dfb7e6a22be453bf4194f9e4b032084a63b9d0f08)));
         // line 25
         echo "        ";
         if ( !($context["append"] ?? null)) {
