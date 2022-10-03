@@ -117,8 +117,9 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
         echo "
     <div class=\"row\">
         <div class=\"col-md-6\">
-            <div class=\"box box-primary kl-bloc-visite\">
-                <div class=\"box-header\">
+            <div class=\"box box-primary\"> ";
+        // line 34
+        echo "                <div class=\"box-header\">
                     <h3 class=\"box-title\">Feuille d'utilisation des I.T. </h3>
                 </div>
 
@@ -209,45 +210,20 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                                 </div>
                             </div>
 
-                            <div class=\"row\">
-                                <div class=\"col-md-12\">
-                                    <div class=\"box box-warning\">
-
-                                        <div class=\"col-md-6\">
-                                            <a href=\"";
-        // line 93
-        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_search");
-        echo "\"
-                                                class=\"btn btn-default pull-left btn-mini-rectif\" >
-                                                Retour à la rechercher
-                                            </a>
-                                        </div>
-                                        
-                                        <div class=\"col-md-6\">
-                                            <a href=\"";
-        // line 100
-        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_new");
-        echo "\"
-                                                class=\"btn btn-light pull-left btn-mini-rectif\" >
-                                                Retour à l'ajout multiple
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </form>
                 </div>
+                
             </div>
         </div>
         
 ";
-        // line 175
+        // line 155
         echo "
         <div class=\"col-md-6\">
-            <div class=\"box box-primary kl-bloc-visite\">
-                <div class=\"box-header\">
+            <div class=\"box box-primary\">  ";
+        // line 158
+        echo "                <div class=\"box-header\">
                     <h3 class=\"box-title\">Situation de stock mensuelle I.T. </h3>
                 </div>
                 <div class=\"box-body\">
@@ -265,7 +241,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
 
                             <!-- Centre -->
                             <div class=\"";
-        // line 195
+        // line 175
         if ((($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? null), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_SUPERADMIN")) && ($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? null), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_APPROVISIONNEMENT")))) {
             echo "hidden";
         }
@@ -279,45 +255,45 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                                                 Choisir
                                             </option>
                                             ";
-        // line 204
+        // line 184
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["provinces"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["province"]) {
-            // line 205
+            // line 185
             echo "                                            <optgroup label=\"";
             echo twig_escape_filter($this->env, $this->getAttribute($context["province"], "prvNom", array()), "html", null, true);
             echo "\">
                                                 ";
-            // line 206
+            // line 186
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable(($context["centres"] ?? null));
             foreach ($context['_seq'] as $context["_key"] => $context["centre"]) {
-                // line 207
+                // line 187
                 echo "                                                    ";
-                // line 208
+                // line 188
                 echo "                                                        <option value=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "id", array()), "html", null, true);
                 echo "\">
                                                             ";
-                // line 209
+                // line 189
                 echo twig_escape_filter($this->env, twig_upper_filter($this->env, $this->getAttribute($context["centre"], "ctrNom", array())), "html", null, true);
                 echo "
                                                         </option>
                                                     ";
-                // line 212
+                // line 192
                 echo "                                                ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['centre'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 213
+            // line 193
             echo "                                            </optgroup>
                                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['province'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 215
+        // line 195
         echo "                                        </select>
                                     </div>
                                 </div>
@@ -339,13 +315,36 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                         </div>
                     </form>
                 </div>
-
             </div>
             ";
-        // line 245
+        // line 224
         echo "        </div>
     </div>
 
+    <div class=\"row\">
+        <div class=\"col-xs-12\">
+            <div class=\"box box-warning\">
+                <div class=\"box-body\">
+                    <a href=\"";
+        // line 231
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_search");
+        echo "\"
+                        class=\"btn btn-ligth\" >
+                        Retour à la rechercher
+                    </a>
+
+                    <a href=\"";
+        // line 236
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_new");
+        echo "\"
+                        class=\"btn btn-default\" >
+                        Retour à l'ajout multiple
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class=\"row\">
         <div class=\"col-xs-12\">
             <div class=\"box box-success\">
@@ -371,38 +370,38 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                             </thead>
                             <tbody>
                             ";
-        // line 272
+        // line 269
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["itu_listes"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["itu_liste"]) {
-            // line 273
+            // line 270
             echo "                                <tr>
                                     <td>
                                         <input type=\"checkbox\" value=\"";
-            // line 275
+            // line 272
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "id", array()), "html", null, true);
             echo "\" name=\"delete[]\" />
                                     </td>
                                     <td>";
-            // line 277
+            // line 274
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ctControle", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 278
+            // line 275
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ituNumero", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 279
+            // line 276
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($context["itu_liste"], "ctImprimeTech", array()), "nomImprimeTech", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 280
+            // line 277
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ituMotifUsed", array()), "html", null, true);
             echo "</td>
                                     <td>
                                         <a class=\"btn btn-primary\" title=\"Modifier\"
                                            href=\"";
-            // line 283
+            // line 280
             echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_edit", array("id" => $this->getAttribute($context["itu_liste"], "id", array()))), "html", null, true);
             echo "\">
                                             <i class=\"fa fa-edit\"></i>
@@ -414,7 +413,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['itu_liste'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 289
+        // line 286
         echo "                            </tbody>
                         </table>
                     </div>
@@ -426,10 +425,10 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
 ";
     }
 
-    // line 299
+    // line 296
     public function block_javascripts($context, array $blocks = array())
     {
-        // line 300
+        // line 297
         echo "    ";
         $this->displayParentBlock("javascripts", $context, $blocks);
         echo "
@@ -437,7 +436,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
     <!-- Vérification existence carte grise -->
     <!-- JQuery UI -->
     <script src=\"";
-        // line 304
+        // line 301
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("plugins/jquery-ui-1.12.1/jquery-ui.js"), "html", null, true);
         echo "\" ></script>
     <script type=\"text/javascript\">
@@ -475,20 +474,20 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
         });
 
         var _generate_used_it_ajax_uri = \"";
-        // line 339
+        // line 336
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_generate_used_ajax");
         echo "\";
         var _generate_stock_it_ajax_uri = \"";
-        // line 340
+        // line 337
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_stock_generate_ajax");
         echo "\";
         var _generate_new_stok_it_ajax_uri = \"";
-        // line 341
+        // line 338
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_new_stock_generate_ajax");
         echo "\";
     </script>
     <script src=\"";
-        // line 343
+        // line 340
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("backoffice/js/index.imprimes.js"), "html", null, true);
         echo "\"></script>
 ";
@@ -506,7 +505,7 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
 
     public function getDebugInfo()
     {
-        return array (  492 => 343,  487 => 341,  483 => 340,  479 => 339,  441 => 304,  433 => 300,  430 => 299,  418 => 289,  406 => 283,  400 => 280,  396 => 279,  392 => 278,  388 => 277,  383 => 275,  379 => 273,  375 => 272,  346 => 245,  321 => 215,  314 => 213,  308 => 212,  303 => 209,  298 => 208,  296 => 207,  292 => 206,  287 => 205,  283 => 204,  269 => 195,  247 => 175,  229 => 100,  219 => 93,  196 => 72,  189 => 70,  183 => 69,  178 => 66,  173 => 65,  171 => 64,  167 => 63,  162 => 62,  158 => 61,  144 => 52,  136 => 47,  117 => 30,  108 => 27,  103 => 26,  99 => 25,  96 => 24,  87 => 21,  84 => 20,  79 => 19,  70 => 16,  67 => 15,  62 => 14,  53 => 11,  50 => 10,  45 => 9,  42 => 8,  35 => 3,  31 => 1,  29 => 6,  27 => 5,  11 => 1,);
+        return array (  491 => 340,  486 => 338,  482 => 337,  478 => 336,  440 => 301,  432 => 297,  429 => 296,  417 => 286,  405 => 280,  399 => 277,  395 => 276,  391 => 275,  387 => 274,  382 => 272,  378 => 270,  374 => 269,  338 => 236,  330 => 231,  321 => 224,  297 => 195,  290 => 193,  284 => 192,  279 => 189,  274 => 188,  272 => 187,  268 => 186,  263 => 185,  259 => 184,  245 => 175,  226 => 158,  222 => 155,  197 => 72,  190 => 70,  184 => 69,  179 => 66,  174 => 65,  172 => 64,  168 => 63,  163 => 62,  159 => 61,  145 => 52,  137 => 47,  122 => 34,  117 => 30,  108 => 27,  103 => 26,  99 => 25,  96 => 24,  87 => 21,  84 => 20,  79 => 19,  70 => 16,  67 => 15,  62 => 14,  53 => 11,  50 => 10,  45 => 9,  42 => 8,  35 => 3,  31 => 1,  29 => 6,  27 => 5,  11 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */

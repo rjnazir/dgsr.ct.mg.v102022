@@ -15,11 +15,11 @@ class __TwigTemplate_63d6a9838d6a39e4b9bb7cbcdd8062e18a76bf0cc31666ffb2c449a8ccc
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_8190de19b03e4cb0a886cfad05ed56ac785a9b977940958256bc519bcc0b68cf = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_8190de19b03e4cb0a886cfad05ed56ac785a9b977940958256bc519bcc0b68cf->enter($__internal_8190de19b03e4cb0a886cfad05ed56ac785a9b977940958256bc519bcc0b68cf_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "backoffice/base_admin_footer.html.twig"));
+        $__internal_73e0f2e8de963c6a39b4189229b88d2792e8b4ae0c64663a663e324fc648f3da = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_73e0f2e8de963c6a39b4189229b88d2792e8b4ae0c64663a663e324fc648f3da->enter($__internal_73e0f2e8de963c6a39b4189229b88d2792e8b4ae0c64663a663e324fc648f3da_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "backoffice/base_admin_footer.html.twig"));
 
-        $__internal_c5f68c778696c7a751d950a3ef7ce2882fb4dd521280173d77e3e1cce9540f9f = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_c5f68c778696c7a751d950a3ef7ce2882fb4dd521280173d77e3e1cce9540f9f->enter($__internal_c5f68c778696c7a751d950a3ef7ce2882fb4dd521280173d77e3e1cce9540f9f_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "backoffice/base_admin_footer.html.twig"));
+        $__internal_41deb1c18b914e6a790797a432eb8e7f839a48778797295e0c2c6f27f959dfe0 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_41deb1c18b914e6a790797a432eb8e7f839a48778797295e0c2c6f27f959dfe0->enter($__internal_41deb1c18b914e6a790797a432eb8e7f839a48778797295e0c2c6f27f959dfe0_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "backoffice/base_admin_footer.html.twig"));
 
         // line 1
         echo "<footer class=\"main-footer\">
@@ -29,10 +29,10 @@ class __TwigTemplate_63d6a9838d6a39e4b9bb7cbcdd8062e18a76bf0cc31666ffb2c449a8ccc
     <strong>Copyright &copy; 2017 <a href=\"#\">Livenexx</a>.</strong>
 </footer>";
         
-        $__internal_8190de19b03e4cb0a886cfad05ed56ac785a9b977940958256bc519bcc0b68cf->leave($__internal_8190de19b03e4cb0a886cfad05ed56ac785a9b977940958256bc519bcc0b68cf_prof);
+        $__internal_73e0f2e8de963c6a39b4189229b88d2792e8b4ae0c64663a663e324fc648f3da->leave($__internal_73e0f2e8de963c6a39b4189229b88d2792e8b4ae0c64663a663e324fc648f3da_prof);
 
         
-        $__internal_c5f68c778696c7a751d950a3ef7ce2882fb4dd521280173d77e3e1cce9540f9f->leave($__internal_c5f68c778696c7a751d950a3ef7ce2882fb4dd521280173d77e3e1cce9540f9f_prof);
+        $__internal_41deb1c18b914e6a790797a432eb8e7f839a48778797295e0c2c6f27f959dfe0->leave($__internal_41deb1c18b914e6a790797a432eb8e7f839a48778797295e0c2c6f27f959dfe0_prof);
 
     }
 

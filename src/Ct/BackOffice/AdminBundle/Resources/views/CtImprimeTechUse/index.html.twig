@@ -30,7 +30,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="box box-primary kl-bloc-visite">
+            <div class="box box-primary"> {#  kl-bloc-visite #}
                 <div class="box-header">
                     <h3 class="box-title">Feuille d'utilisation des I.T. </h3>
                 </div>
@@ -85,30 +85,10 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="box box-warning">
-
-                                        <div class="col-md-6">
-                                            <a href="{{ path('imprime_tech_use_search') }}"
-                                                class="btn btn-default pull-left btn-mini-rectif" >
-                                                Retour à la rechercher
-                                            </a>
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                            <a href="{{ path('imprime_tech_use_new') }}"
-                                                class="btn btn-light pull-left btn-mini-rectif" >
-                                                Retour à l'ajout multiple
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </form>
                 </div>
+                
             </div>
         </div>
         
@@ -174,7 +154,7 @@
         </div> #}
 
         <div class="col-md-6">
-            <div class="box box-primary kl-bloc-visite">
+            <div class="box box-primary">  {# kl-bloc-visite #}
                 <div class="box-header">
                     <h3 class="box-title">Situation de stock mensuelle I.T. </h3>
                 </div>
@@ -233,7 +213,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
             {# <div class="box box-danger kl-bloc-visite">
                 <div class="box-body bg-danger table-responsive">
@@ -245,6 +224,24 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-warning">
+                <div class="box-body">
+                    <a href="{{ path('imprime_tech_use_search') }}"
+                        class="btn btn-ligth" >
+                        Retour à la rechercher
+                    </a>
+
+                    <a href="{{ path('imprime_tech_use_new') }}"
+                        class="btn btn-default" >
+                        Retour à l'ajout multiple
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-xs-12">
             <div class="box box-success">

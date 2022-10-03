@@ -23,11 +23,11 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $__internal_d3d81490abd3783f6362eec93b1a544bac6b8c315663c0028728c46d0dce6f29 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_d3d81490abd3783f6362eec93b1a544bac6b8c315663c0028728c46d0dce6f29->enter($__internal_d3d81490abd3783f6362eec93b1a544bac6b8c315663c0028728c46d0dce6f29_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "AdminBundle:CtImprimeTechUse:index.html.twig"));
+        $__internal_d667d9555b3f6518e8e50731e86031361ca1052121547d115bbf8d7f5ab64123 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_d667d9555b3f6518e8e50731e86031361ca1052121547d115bbf8d7f5ab64123->enter($__internal_d667d9555b3f6518e8e50731e86031361ca1052121547d115bbf8d7f5ab64123_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "AdminBundle:CtImprimeTechUse:index.html.twig"));
 
-        $__internal_e7a7b6fa1a7a413ecea612267a3fc0436840fae7bce00875f39e64e8fc07b82c = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_e7a7b6fa1a7a413ecea612267a3fc0436840fae7bce00875f39e64e8fc07b82c->enter($__internal_e7a7b6fa1a7a413ecea612267a3fc0436840fae7bce00875f39e64e8fc07b82c_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "AdminBundle:CtImprimeTechUse:index.html.twig"));
+        $__internal_80db9b6cde5395c229f42877b287c859a09ec978bddf132110cb8a1279156b08 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_80db9b6cde5395c229f42877b287c859a09ec978bddf132110cb8a1279156b08->enter($__internal_80db9b6cde5395c229f42877b287c859a09ec978bddf132110cb8a1279156b08_prof = new Twig_Profiler_Profile($this->getTemplateName(), "template", "AdminBundle:CtImprimeTechUse:index.html.twig"));
 
         // line 5
         $context["menu_imprime_tech_use"] = true;
@@ -36,40 +36,40 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
         // line 1
         $this->parent->display($context, array_merge($this->blocks, $blocks));
         
-        $__internal_d3d81490abd3783f6362eec93b1a544bac6b8c315663c0028728c46d0dce6f29->leave($__internal_d3d81490abd3783f6362eec93b1a544bac6b8c315663c0028728c46d0dce6f29_prof);
+        $__internal_d667d9555b3f6518e8e50731e86031361ca1052121547d115bbf8d7f5ab64123->leave($__internal_d667d9555b3f6518e8e50731e86031361ca1052121547d115bbf8d7f5ab64123_prof);
 
         
-        $__internal_e7a7b6fa1a7a413ecea612267a3fc0436840fae7bce00875f39e64e8fc07b82c->leave($__internal_e7a7b6fa1a7a413ecea612267a3fc0436840fae7bce00875f39e64e8fc07b82c_prof);
+        $__internal_80db9b6cde5395c229f42877b287c859a09ec978bddf132110cb8a1279156b08->leave($__internal_80db9b6cde5395c229f42877b287c859a09ec978bddf132110cb8a1279156b08_prof);
 
     }
 
     // line 3
     public function block_title($context, array $blocks = array())
     {
-        $__internal_8024531d4a44a398b64616397f8bda679b6491749d29c41fa7da50aa459c3ef9 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_8024531d4a44a398b64616397f8bda679b6491749d29c41fa7da50aa459c3ef9->enter($__internal_8024531d4a44a398b64616397f8bda679b6491749d29c41fa7da50aa459c3ef9_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
+        $__internal_7ce51e0cd366537f28ee66d67999ec5f23aa67991286b997ef934cf4a78288b1 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_7ce51e0cd366537f28ee66d67999ec5f23aa67991286b997ef934cf4a78288b1->enter($__internal_7ce51e0cd366537f28ee66d67999ec5f23aa67991286b997ef934cf4a78288b1_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
 
-        $__internal_b9eb9110e9d2d704959bf131112cc3d83439842a5fc9144bc37d698af5196c90 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_b9eb9110e9d2d704959bf131112cc3d83439842a5fc9144bc37d698af5196c90->enter($__internal_b9eb9110e9d2d704959bf131112cc3d83439842a5fc9144bc37d698af5196c90_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
+        $__internal_9d2c63153de897588313a12f63550d7ad14288e5549a37372b2dd1be54ead69d = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_9d2c63153de897588313a12f63550d7ad14288e5549a37372b2dd1be54ead69d->enter($__internal_9d2c63153de897588313a12f63550d7ad14288e5549a37372b2dd1be54ead69d_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "title"));
 
         $this->displayParentBlock("title", $context, $blocks);
         echo " Liste des utilisations des I.T. ";
         
-        $__internal_b9eb9110e9d2d704959bf131112cc3d83439842a5fc9144bc37d698af5196c90->leave($__internal_b9eb9110e9d2d704959bf131112cc3d83439842a5fc9144bc37d698af5196c90_prof);
+        $__internal_9d2c63153de897588313a12f63550d7ad14288e5549a37372b2dd1be54ead69d->leave($__internal_9d2c63153de897588313a12f63550d7ad14288e5549a37372b2dd1be54ead69d_prof);
 
         
-        $__internal_8024531d4a44a398b64616397f8bda679b6491749d29c41fa7da50aa459c3ef9->leave($__internal_8024531d4a44a398b64616397f8bda679b6491749d29c41fa7da50aa459c3ef9_prof);
+        $__internal_7ce51e0cd366537f28ee66d67999ec5f23aa67991286b997ef934cf4a78288b1->leave($__internal_7ce51e0cd366537f28ee66d67999ec5f23aa67991286b997ef934cf4a78288b1_prof);
 
     }
 
     // line 8
     public function block_body($context, array $blocks = array())
     {
-        $__internal_77f6722ee21f142da770617d714696a2cc1c1c0bad33648eab37c45effa1e303 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_77f6722ee21f142da770617d714696a2cc1c1c0bad33648eab37c45effa1e303->enter($__internal_77f6722ee21f142da770617d714696a2cc1c1c0bad33648eab37c45effa1e303_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_e6f35e76be327034c17ed325b73e3af3a344ec0e70f1069f7a3d28fc993a804f = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_e6f35e76be327034c17ed325b73e3af3a344ec0e70f1069f7a3d28fc993a804f->enter($__internal_e6f35e76be327034c17ed325b73e3af3a344ec0e70f1069f7a3d28fc993a804f_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
-        $__internal_fc11e346a3cb2b1d24eea1ecd7d1b0a8a7d2b84c3c99ea87ef440e4604b8711b = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_fc11e346a3cb2b1d24eea1ecd7d1b0a8a7d2b84c3c99ea87ef440e4604b8711b->enter($__internal_fc11e346a3cb2b1d24eea1ecd7d1b0a8a7d2b84c3c99ea87ef440e4604b8711b_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
+        $__internal_998870ab5c735f3446d4a99e192438482bff552d700180899f208dfd2fc0e7c8 = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_998870ab5c735f3446d4a99e192438482bff552d700180899f208dfd2fc0e7c8->enter($__internal_998870ab5c735f3446d4a99e192438482bff552d700180899f208dfd2fc0e7c8_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "body"));
 
         // line 9
         echo "    ";
@@ -147,8 +147,9 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
         echo "
     <div class=\"row\">
         <div class=\"col-md-6\">
-            <div class=\"box box-primary kl-bloc-visite\">
-                <div class=\"box-header\">
+            <div class=\"box box-primary\"> ";
+        // line 34
+        echo "                <div class=\"box-header\">
                     <h3 class=\"box-title\">Feuille d'utilisation des I.T. </h3>
                 </div>
 
@@ -239,45 +240,20 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
                                 </div>
                             </div>
 
-                            <div class=\"row\">
-                                <div class=\"col-md-12\">
-                                    <div class=\"box box-warning\">
-
-                                        <div class=\"col-md-6\">
-                                            <a href=\"";
-        // line 93
-        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_search");
-        echo "\"
-                                                class=\"btn btn-default pull-left btn-mini-rectif\" >
-                                                Retour à la rechercher
-                                            </a>
-                                        </div>
-                                        
-                                        <div class=\"col-md-6\">
-                                            <a href=\"";
-        // line 100
-        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_new");
-        echo "\"
-                                                class=\"btn btn-light pull-left btn-mini-rectif\" >
-                                                Retour à l'ajout multiple
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </form>
                 </div>
+                
             </div>
         </div>
         
 ";
-        // line 175
+        // line 155
         echo "
         <div class=\"col-md-6\">
-            <div class=\"box box-primary kl-bloc-visite\">
-                <div class=\"box-header\">
+            <div class=\"box box-primary\">  ";
+        // line 158
+        echo "                <div class=\"box-header\">
                     <h3 class=\"box-title\">Situation de stock mensuelle I.T. </h3>
                 </div>
                 <div class=\"box-body\">
@@ -295,7 +271,7 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
 
                             <!-- Centre -->
                             <div class=\"";
-        // line 195
+        // line 175
         if ((($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? $this->getContext($context, "app")), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_SUPERADMIN")) && ($this->getAttribute($this->getAttribute($this->getAttribute(($context["app"] ?? $this->getContext($context, "app")), "user", array()), "ctRole", array()), "id", array()) != twig_constant("Ct\\Service\\MetierManagerBundle\\Utils\\RoleName::ID_ROLE_APPROVISIONNEMENT")))) {
             echo "hidden";
         }
@@ -309,45 +285,45 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
                                                 Choisir
                                             </option>
                                             ";
-        // line 204
+        // line 184
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["provinces"] ?? $this->getContext($context, "provinces")));
         foreach ($context['_seq'] as $context["_key"] => $context["province"]) {
-            // line 205
+            // line 185
             echo "                                            <optgroup label=\"";
             echo twig_escape_filter($this->env, $this->getAttribute($context["province"], "prvNom", array()), "html", null, true);
             echo "\">
                                                 ";
-            // line 206
+            // line 186
             $context['_parent'] = $context;
             $context['_seq'] = twig_ensure_traversable(($context["centres"] ?? $this->getContext($context, "centres")));
             foreach ($context['_seq'] as $context["_key"] => $context["centre"]) {
-                // line 207
+                // line 187
                 echo "                                                    ";
-                // line 208
+                // line 188
                 echo "                                                        <option value=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "id", array()), "html", null, true);
                 echo "\">
                                                             ";
-                // line 209
+                // line 189
                 echo twig_escape_filter($this->env, twig_upper_filter($this->env, $this->getAttribute($context["centre"], "ctrNom", array())), "html", null, true);
                 echo "
                                                         </option>
                                                     ";
-                // line 212
+                // line 192
                 echo "                                                ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['centre'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 213
+            // line 193
             echo "                                            </optgroup>
                                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['province'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 215
+        // line 195
         echo "                                        </select>
                                     </div>
                                 </div>
@@ -369,13 +345,36 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
                         </div>
                     </form>
                 </div>
-
             </div>
             ";
-        // line 245
+        // line 224
         echo "        </div>
     </div>
 
+    <div class=\"row\">
+        <div class=\"col-xs-12\">
+            <div class=\"box box-warning\">
+                <div class=\"box-body\">
+                    <a href=\"";
+        // line 231
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_search");
+        echo "\"
+                        class=\"btn btn-ligth\" >
+                        Retour à la rechercher
+                    </a>
+
+                    <a href=\"";
+        // line 236
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_new");
+        echo "\"
+                        class=\"btn btn-default\" >
+                        Retour à l'ajout multiple
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class=\"row\">
         <div class=\"col-xs-12\">
             <div class=\"box box-success\">
@@ -401,38 +400,38 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
                             </thead>
                             <tbody>
                             ";
-        // line 272
+        // line 269
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["itu_listes"] ?? $this->getContext($context, "itu_listes")));
         foreach ($context['_seq'] as $context["_key"] => $context["itu_liste"]) {
-            // line 273
+            // line 270
             echo "                                <tr>
                                     <td>
                                         <input type=\"checkbox\" value=\"";
-            // line 275
+            // line 272
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "id", array()), "html", null, true);
             echo "\" name=\"delete[]\" />
                                     </td>
                                     <td>";
-            // line 277
+            // line 274
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ctControle", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 278
+            // line 275
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ituNumero", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 279
+            // line 276
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($context["itu_liste"], "ctImprimeTech", array()), "nomImprimeTech", array()), "html", null, true);
             echo "</td>
                                     <td>";
-            // line 280
+            // line 277
             echo twig_escape_filter($this->env, $this->getAttribute($context["itu_liste"], "ituMotifUsed", array()), "html", null, true);
             echo "</td>
                                     <td>
                                         <a class=\"btn btn-primary\" title=\"Modifier\"
                                            href=\"";
-            // line 283
+            // line 280
             echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_edit", array("id" => $this->getAttribute($context["itu_liste"], "id", array()))), "html", null, true);
             echo "\">
                                             <i class=\"fa fa-edit\"></i>
@@ -444,7 +443,7 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['itu_liste'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 289
+        // line 286
         echo "                            </tbody>
                         </table>
                     </div>
@@ -455,23 +454,23 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
 
 ";
         
-        $__internal_fc11e346a3cb2b1d24eea1ecd7d1b0a8a7d2b84c3c99ea87ef440e4604b8711b->leave($__internal_fc11e346a3cb2b1d24eea1ecd7d1b0a8a7d2b84c3c99ea87ef440e4604b8711b_prof);
+        $__internal_998870ab5c735f3446d4a99e192438482bff552d700180899f208dfd2fc0e7c8->leave($__internal_998870ab5c735f3446d4a99e192438482bff552d700180899f208dfd2fc0e7c8_prof);
 
         
-        $__internal_77f6722ee21f142da770617d714696a2cc1c1c0bad33648eab37c45effa1e303->leave($__internal_77f6722ee21f142da770617d714696a2cc1c1c0bad33648eab37c45effa1e303_prof);
+        $__internal_e6f35e76be327034c17ed325b73e3af3a344ec0e70f1069f7a3d28fc993a804f->leave($__internal_e6f35e76be327034c17ed325b73e3af3a344ec0e70f1069f7a3d28fc993a804f_prof);
 
     }
 
-    // line 299
+    // line 296
     public function block_javascripts($context, array $blocks = array())
     {
-        $__internal_932602a8957130d2517223f34ccf2bfbf4f38794d83b5b262db43b6a903ac51e = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
-        $__internal_932602a8957130d2517223f34ccf2bfbf4f38794d83b5b262db43b6a903ac51e->enter($__internal_932602a8957130d2517223f34ccf2bfbf4f38794d83b5b262db43b6a903ac51e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
+        $__internal_6f40f3ba33cf47ae71d3d9ea47e1277af8355e6679c448d2ed852fabfe3f6088 = $this->env->getExtension("Symfony\\Bundle\\WebProfilerBundle\\Twig\\WebProfilerExtension");
+        $__internal_6f40f3ba33cf47ae71d3d9ea47e1277af8355e6679c448d2ed852fabfe3f6088->enter($__internal_6f40f3ba33cf47ae71d3d9ea47e1277af8355e6679c448d2ed852fabfe3f6088_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
 
-        $__internal_9716b9c03506cd389a6389bc2ddead844ba6e492998ae5a8a55b4be477efc44e = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
-        $__internal_9716b9c03506cd389a6389bc2ddead844ba6e492998ae5a8a55b4be477efc44e->enter($__internal_9716b9c03506cd389a6389bc2ddead844ba6e492998ae5a8a55b4be477efc44e_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
+        $__internal_6f1736131d110f7c2b80858113c8640e416b61de32f262e9474282490327989d = $this->env->getExtension("Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension");
+        $__internal_6f1736131d110f7c2b80858113c8640e416b61de32f262e9474282490327989d->enter($__internal_6f1736131d110f7c2b80858113c8640e416b61de32f262e9474282490327989d_prof = new Twig_Profiler_Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 300
+        // line 297
         echo "    ";
         $this->displayParentBlock("javascripts", $context, $blocks);
         echo "
@@ -479,7 +478,7 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
     <!-- Vérification existence carte grise -->
     <!-- JQuery UI -->
     <script src=\"";
-        // line 304
+        // line 301
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("plugins/jquery-ui-1.12.1/jquery-ui.js"), "html", null, true);
         echo "\" ></script>
     <script type=\"text/javascript\">
@@ -517,28 +516,28 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
         });
 
         var _generate_used_it_ajax_uri = \"";
-        // line 339
+        // line 336
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_generate_used_ajax");
         echo "\";
         var _generate_stock_it_ajax_uri = \"";
-        // line 340
+        // line 337
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_stock_generate_ajax");
         echo "\";
         var _generate_new_stok_it_ajax_uri = \"";
-        // line 341
+        // line 338
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_new_stock_generate_ajax");
         echo "\";
     </script>
     <script src=\"";
-        // line 343
+        // line 340
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("backoffice/js/index.imprimes.js"), "html", null, true);
         echo "\"></script>
 ";
         
-        $__internal_9716b9c03506cd389a6389bc2ddead844ba6e492998ae5a8a55b4be477efc44e->leave($__internal_9716b9c03506cd389a6389bc2ddead844ba6e492998ae5a8a55b4be477efc44e_prof);
+        $__internal_6f1736131d110f7c2b80858113c8640e416b61de32f262e9474282490327989d->leave($__internal_6f1736131d110f7c2b80858113c8640e416b61de32f262e9474282490327989d_prof);
 
         
-        $__internal_932602a8957130d2517223f34ccf2bfbf4f38794d83b5b262db43b6a903ac51e->leave($__internal_932602a8957130d2517223f34ccf2bfbf4f38794d83b5b262db43b6a903ac51e_prof);
+        $__internal_6f40f3ba33cf47ae71d3d9ea47e1277af8355e6679c448d2ed852fabfe3f6088->leave($__internal_6f40f3ba33cf47ae71d3d9ea47e1277af8355e6679c448d2ed852fabfe3f6088_prof);
 
     }
 
@@ -554,7 +553,7 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
 
     public function getDebugInfo()
     {
-        return array (  534 => 343,  529 => 341,  525 => 340,  521 => 339,  483 => 304,  475 => 300,  466 => 299,  448 => 289,  436 => 283,  430 => 280,  426 => 279,  422 => 278,  418 => 277,  413 => 275,  409 => 273,  405 => 272,  376 => 245,  351 => 215,  344 => 213,  338 => 212,  333 => 209,  328 => 208,  326 => 207,  322 => 206,  317 => 205,  313 => 204,  299 => 195,  277 => 175,  259 => 100,  249 => 93,  226 => 72,  219 => 70,  213 => 69,  208 => 66,  203 => 65,  201 => 64,  197 => 63,  192 => 62,  188 => 61,  174 => 52,  166 => 47,  147 => 30,  138 => 27,  133 => 26,  129 => 25,  126 => 24,  117 => 21,  114 => 20,  109 => 19,  100 => 16,  97 => 15,  92 => 14,  83 => 11,  80 => 10,  75 => 9,  66 => 8,  47 => 3,  37 => 1,  35 => 6,  33 => 5,  11 => 1,);
+        return array (  533 => 340,  528 => 338,  524 => 337,  520 => 336,  482 => 301,  474 => 297,  465 => 296,  447 => 286,  435 => 280,  429 => 277,  425 => 276,  421 => 275,  417 => 274,  412 => 272,  408 => 270,  404 => 269,  368 => 236,  360 => 231,  351 => 224,  327 => 195,  320 => 193,  314 => 192,  309 => 189,  304 => 188,  302 => 187,  298 => 186,  293 => 185,  289 => 184,  275 => 175,  256 => 158,  252 => 155,  227 => 72,  220 => 70,  214 => 69,  209 => 66,  204 => 65,  202 => 64,  198 => 63,  193 => 62,  189 => 61,  175 => 52,  167 => 47,  152 => 34,  147 => 30,  138 => 27,  133 => 26,  129 => 25,  126 => 24,  117 => 21,  114 => 20,  109 => 19,  100 => 16,  97 => 15,  92 => 14,  83 => 11,  80 => 10,  75 => 9,  66 => 8,  47 => 3,  37 => 1,  35 => 6,  33 => 5,  11 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -599,7 +598,7 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
 
     <div class=\"row\">
         <div class=\"col-md-6\">
-            <div class=\"box box-primary kl-bloc-visite\">
+            <div class=\"box box-primary\"> {#  kl-bloc-visite #}
                 <div class=\"box-header\">
                     <h3 class=\"box-title\">Feuille d'utilisation des I.T. </h3>
                 </div>
@@ -654,30 +653,10 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
                                 </div>
                             </div>
 
-                            <div class=\"row\">
-                                <div class=\"col-md-12\">
-                                    <div class=\"box box-warning\">
-
-                                        <div class=\"col-md-6\">
-                                            <a href=\"{{ path('imprime_tech_use_search') }}\"
-                                                class=\"btn btn-default pull-left btn-mini-rectif\" >
-                                                Retour à la rechercher
-                                            </a>
-                                        </div>
-                                        
-                                        <div class=\"col-md-6\">
-                                            <a href=\"{{ path('imprime_tech_use_new') }}\"
-                                                class=\"btn btn-light pull-left btn-mini-rectif\" >
-                                                Retour à l'ajout multiple
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </form>
                 </div>
+                
             </div>
         </div>
         
@@ -743,7 +722,7 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
         </div> #}
 
         <div class=\"col-md-6\">
-            <div class=\"box box-primary kl-bloc-visite\">
+            <div class=\"box box-primary\">  {# kl-bloc-visite #}
                 <div class=\"box-header\">
                     <h3 class=\"box-title\">Situation de stock mensuelle I.T. </h3>
                 </div>
@@ -802,7 +781,6 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
                         </div>
                     </form>
                 </div>
-
             </div>
             {# <div class=\"box box-danger kl-bloc-visite\">
                 <div class=\"box-body bg-danger table-responsive\">
@@ -814,6 +792,24 @@ class __TwigTemplate_dce3fcaa41c5cd823a595514a08bc7617e7c01893e8a007656dccc49204
         </div>
     </div>
 
+    <div class=\"row\">
+        <div class=\"col-xs-12\">
+            <div class=\"box box-warning\">
+                <div class=\"box-body\">
+                    <a href=\"{{ path('imprime_tech_use_search') }}\"
+                        class=\"btn btn-ligth\" >
+                        Retour à la rechercher
+                    </a>
+
+                    <a href=\"{{ path('imprime_tech_use_new') }}\"
+                        class=\"btn btn-default\" >
+                        Retour à l'ajout multiple
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class=\"row\">
         <div class=\"col-xs-12\">
             <div class=\"box box-success\">

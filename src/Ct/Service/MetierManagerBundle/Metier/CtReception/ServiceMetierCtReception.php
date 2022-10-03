@@ -465,7 +465,7 @@ class ServiceMetierCtReception
 
             // Récupérer répertoire modèle Word
             $_pv_directory        = $this->_container->getParameter('reporting_template_directory');
-            $_filename            = $_num_group;
+            $_filename            = $_num_group .'_'. date('Yndhms');
 
             $_path                = $_pv_directory . PathReportingName::GENERATE_RECEPTION;
             $_dest_final          = $_path . $_filename . '.docx';
@@ -1032,7 +1032,7 @@ class ServiceMetierCtReception
      */
     public function generatePVReceptionDownloadLink($_num_group, $_ext)
     {
-        $_filename = $_num_group . $_ext;
+        $_filename = $_num_group .'_'. date('Yndhms') . $_ext;
         $_path = $this->_container->get('kernel')->getRootDir(). "/../web/reporting/" . PathReportingName::GENERATE_RECEPTION;
         return array(
             'filename' => $_filename,
@@ -1067,7 +1067,7 @@ class ServiceMetierCtReception
             }
             $_phpWord               = new PhpWord();
             $_template              = $_phpWord->loadTemplate($_source_pv);
-            $_filename              =  str_replace('/', '_', $_arr_of_rec['rcp_num_pv']);
+            $_filename              =  str_replace('/', '_', $_arr_of_rec['rcp_num_pv']) .'_'. date('Yndhms');
             $_path                  = $_pv_directory . PathReportingName::GENERATE_DUPLICATA;
             $_dest_tmp              = $_path . $_filename . '.docx';
             $_file_without_ext      = $_filename;
@@ -1216,7 +1216,7 @@ class ServiceMetierCtReception
      */
     public function generatePVDuplicataDownloadLink($_num_pv, $_ext)
     {
-        $_num_pv   =  str_replace('/', '_', $_num_pv);
+        $_num_pv   =  str_replace('/', '_', $_num_pv) .'_'. date('Yndhms');
         $_filename = $_num_pv . $_ext;
         $_path = $this->_container->get('kernel')->getRootDir(). "/../web/reporting/" . PathReportingName::GENERATE_DUPLICATA;
         return array(

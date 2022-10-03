@@ -185,8 +185,8 @@ class ServiceMetierCtConstatationAvDedouanement
 
             $_path                      = $_pv_directory . PathReportingName::GENERATE_CONSTATATION;
 
-            $_dest_tmp                  = $_path . $_filename . '.docx';
-            $_file_without_ext          = $_filename;
+            $_dest_tmp                  = $_path . $_filename .'_' . date('Yndhms'). '.docx';
+            $_file_without_ext          = $_filename . '_' . date('Yndhms');
 
             $_url_scheme                = $this->_container->get('request_stack')->getCurrentRequest()->server->get('HTTP_HOST');
             $_path_docx                 = 'http://' . $_url_scheme . '/reporting/' . PathReportingName::GENERATE_CONSTATATION . $_filename . '.docx';
@@ -367,8 +367,8 @@ class ServiceMetierCtConstatationAvDedouanement
      * @return string
      */
     public function convertToPdf($_path, $_file_without_ext) {
-        $_file_docx = $_file_without_ext . ".docx";
-        $_file_pdf = $_file_without_ext . ".pdf";
+        $_file_docx = $_file_without_ext .'_' . date('Yndhms') . ".docx";
+        $_file_pdf = $_file_without_ext .'_' . date('Yndhms') . ".pdf";
         $_source_tmp = $_path . $_file_docx;
         $_dest_tmp = $_path . $_file_pdf;
         $_libreoffice_path = $this->_container->getParameter('libreoffice_path');
@@ -394,7 +394,7 @@ class ServiceMetierCtConstatationAvDedouanement
         $_const_av_ded = $this->getCtConstatationAvDedouanementById($_id);
         $_num_pv = $_const_av_ded->getCadNumero();
         $_num_pv = str_replace('/', '_', $_num_pv);
-        $_filename = $_num_pv . $_ext;
+        $_filename = $_num_pv .'_'. date('Yndhms') . $_ext;
         $_path = $this->_container->get('kernel')->getRootDir(). "/../web/reporting/" . PathReportingName::GENERATE_CONSTATATION;
         return array(
             'filename' => $_filename,
@@ -461,7 +461,7 @@ class ServiceMetierCtConstatationAvDedouanement
         $_filename              = strtoupper($_num_pv);
 
         $_dest_tmp              = $_path . $_filename . '.docx';
-        $_file_without_ext      = $_filename;
+        $_file_without_ext      = $_filename . '_' . date('Yndhms');
 
         $_url_scheme            = $this->_container->get('request_stack')->getCurrentRequest()->server->get('HTTP_HOST');
         $_path_docx             = 'http://' . $_url_scheme . '/reporting/' . PathReportingName::GENERATE_CONSTATATION . $_filename . '.docx';
@@ -649,7 +649,7 @@ class ServiceMetierCtConstatationAvDedouanement
         $_filename         = $_num_fdc;
         $_path             = $_pv_directory . PathReportingName::GENERATE_CONSTATATION_FICHE_CONTROLE;
         $_dest_tmp         = $_path . $_filename . '.docx';
-        $_file_without_ext = $_filename;
+        $_file_without_ext = $_filename . '_' . date('Yndhms');
 
         $_url_scheme= $this->_container->get('request_stack')->getCurrentRequest()->server->get('HTTP_HOST');
         $_path_docx = 'http://' . $_url_scheme . '/reporting/' . PathReportingName::GENERATE_CONSTATATION_FICHE_CONTROLE . $_filename . '.docx';

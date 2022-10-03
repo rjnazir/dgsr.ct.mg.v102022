@@ -79,7 +79,7 @@ class CtImprimeTechUseController extends Controller
                 $_used_it->setItuUsed(TRUE);
                 $_used_it->setItuMotifUsed($_motif_uit);
                 $_em_used_it->saveCtImprimeTechUse($_used_it, 'new', NULL);
-                $_em_used_it->setFlash('success', "La mise à jour de l'utilisation de l'imprimé technique ".$_used_it->getItuNumero()." est effectuée avec succès.");
+                $_em_used_it->setFlash('success', "La mise à jour de l'utilisation ".$_used_it->getCtImprimeTech()->getAbrevImprimeTech()." N° ".$_used_it->getItuNumero()." est effectué(e) avec succès.");
             }
             return $this->redirect($this->generateUrl('imprime_tech_use_index'));
         }
@@ -146,14 +146,19 @@ class CtImprimeTechUseController extends Controller
                         $_em_itu->setFlash('error', "Le N° de contrôle ".$_imprime_tech_use->getCtControle()." est introuvable dans votre liste des visites d'aujourd'hui.");
                     }else{
                         $_action = $_imprime_tech_use->getItuUsed();
-                        if($_action === 0){
-                            $_em_itu->saveCtImprimeTechUse($_imprime_tech_use, 'new', NULL);
-                            $_em_itu->setFlash('success', "La mise à jour de l'utilisation de l'imprimé technique est effectuée avec succès.");
-                            return $this->redirect($this->generateUrl('imprime_tech_use_index'));
+                        $_trouve = $_em_itu->getITUByITAndControleId($_imprime_tech_use->getCtImprimeTech(), $_imprime_tech_use->getCtControle());
+                        if($_trouve == FALSE){
+                            if($_action == 0){
+                                $_em_itu->saveCtImprimeTechUse($_imprime_tech_use, 'new', NULL);
+                                $_em_itu->setFlash('success', "La mise à jour de l'utilisation de l'imprimé technique est effectuée avec succès.");
+                                return $this->redirect($this->generateUrl('imprime_tech_use_index'));
+                            }else{
+                                $_em_itu->saveCtImprimeTechUse($_imprime_tech_use, 'update', NULL);
+                                $_em_itu->setFlash('success', "La modification de l'utilisation de l'imprimé technique est modifiée avec succès.");
+                                return $this->redirect($this->generateUrl('imprime_tech_use_index'));
+                            }
                         }else{
-                            $_em_itu->saveCtImprimeTechUse($_imprime_tech_use, 'update', NULL);
-                            $_em_itu->setFlash('success', "La modification de l'utilisation de l'imprimé technique est modifiée avec succès.");
-                            return $this->redirect($this->generateUrl('imprime_tech_use_index'));
+                            $_em_itu->setFlash('error', "Une autre imprimé technique de même type est déjà affectée au n° de contrôle ".$_imprime_tech_use->getCtControle().".");
                         }
                     }
                     break;

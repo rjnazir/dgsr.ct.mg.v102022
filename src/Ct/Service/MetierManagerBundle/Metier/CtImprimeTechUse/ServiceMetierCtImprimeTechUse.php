@@ -1589,6 +1589,29 @@ class ServiceMetierCtImprimeTechUse
     }
 
     /**
+     *  Fonction permettant de tester un numéro d'imprimée technique s'il existe déjà ou non
+     *  @param $_imprime_tech_id : ID imprimée technique à tester
+     *  @param $_ct_controle_id : ID controle technique à tester
+     *  @return $_trouve (boolean)
+     */
+    public function getITUByITAndControleId($_imprime_tech_id, $_ct_controle_id)
+    {
+        $_entity_itu = EntityName::CT_IMPRIME_TECH_USE;
+        $_trouve = false;
+        $_sql    = "SELECT u
+                    FROM    $_entity_itu u 
+                    WHERE   u.ctImprimeTech = :ct_imprimetech_id
+                            AND u.ctControle != :ct_controle_id";
+        $_query  = $this->_entity_manager->createQuery($_sql);
+        $_query->setParameter('ct_imprimetech_id', $_imprime_tech_id);
+        $_query->setParameter('ct_controle_id', $_ct_controle_id);
+        $_ret = $_query->getResult();
+        $_nombre = count($_ret);
+        if($_nombre != 0) $_trouve = true;
+        return $_trouve;
+    }
+
+    /**
      *  Fonction permettant de tester si le numéro de l'IT existe déjà dans la liste des IT
      *  @param $idbe    : Identifiant du bordereau d'envoi
      *  @param $idctr   : Identifiant du centre destinataire
@@ -2275,9 +2298,10 @@ class ServiceMetierCtImprimeTechUse
             $query->setParameter(1, $_ct_controle_id);
             $query->setParameter(2, $_ct_centre_id);
             $query->setParameter(3, $_androany.'%');
-            $_controles = $query->getScalarResult();
+            $_controles = $query->getSingleScalarResult();
             if($_controles)
-                $_controle_id = $_controles->getId();
+                // $_controle_id = $_controles->getId();
+                $_controle_id = $_controles;
         }
         else if ($_type_controle === 'Réception')
         {
@@ -2287,9 +2311,10 @@ class ServiceMetierCtImprimeTechUse
             $query->setParameter(1, $_ct_controle_id);
             $query->setParameter(2, $_ct_centre_id);
             $query->setParameter(3, $_androany.'%');
-            $_controles = $query->getScalarResult();
+            $_controles = $query->getSingleScalarResult();
             if($_controles)
-                $_controle_id = $_controles->getId();
+                // $_controle_id = $_controles->getId();
+                $_controle_id = $_controles;
         }
         else if ($_type_controle === 'Constatation')
         {
@@ -2299,9 +2324,10 @@ class ServiceMetierCtImprimeTechUse
             $query->setParameter(1, $_ct_controle_id);
             $query->setParameter(2, $_ct_centre_id);
             $query->setParameter(3, $_androany.'%');
-            $_controles = $query->getScalarResult();
+            $_controles = $query->getSingleScalarResult();
             if($_controles)
-                $_controle_id = $_controles->getId();
+                // $_controle_id = $_controles->getId();
+                $_controle_id = $_controles;
         }
         
         return $_controle_id;

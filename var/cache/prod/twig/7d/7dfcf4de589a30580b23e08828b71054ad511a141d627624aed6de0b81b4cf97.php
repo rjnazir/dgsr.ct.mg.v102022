@@ -215,10 +215,27 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
         }
         // line 100
         echo "                        </div>
+                        <div class=\"row\">
+                            <div class=\"col-xs-12\" >
+                                <a href=\"";
+        // line 103
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_index");
+        echo "\" class=\"btn btn-light\" >
+                                    Retour à la liste
+                                </a>
+
+                                <a href=\"";
+        // line 107
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_new");
+        echo "\" class=\"btn btn-info\" >
+                                    Retour à l'ajout multiple
+                                </a>
+                            </div>
+                        </div>
                         ";
-        // line 101
+        // line 112
         if (($context["imprime"] ?? null)) {
-            // line 102
+            // line 113
             echo "                        <div class=\"row\">
                             <div class=\"col-md-12\">
                                 <div class=\"box box-primary\">
@@ -232,7 +249,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                 <div class=\"form-group\">
                                                     <label>N° bordereau d'envoi</label>
                                                     <input value=\"";
-            // line 114
+            // line 125
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["imprime"] ?? null), "ctBordereau", array()), "blNumero", array()), "html", null, true);
             echo "\" class=\"form-control\" disabled />
                                                 </div>
@@ -241,7 +258,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                 <div class=\"form-group\">
                                                     <label>N° de l'imprimé technique</label>
                                                     <input value=\"";
-            // line 120
+            // line 131
             echo twig_escape_filter($this->env, $this->getAttribute(($context["imprime"] ?? null), "ituNumero", array()), "html", null, true);
             echo "\" class=\"form-control\" disabled />
                                                 </div>
@@ -252,7 +269,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                 <div class=\"form-group\">
                                                     <label>Centre destinataire</label>
                                                     <input value=\"";
-            // line 128
+            // line 139
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["imprime"] ?? null), "ctCentre", array()), "ctrNom", array()), "html", null, true);
             echo "\" class=\"form-control\" disabled />
                                                 </div>
@@ -260,7 +277,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                             <div class=\"col-md-6\">
                                                 <div class=\"form-check\" style=\"margin:15px 0 0; padding: 15px 0 0 0\">
                                                     <input class=\"form-check-input\" type=\"checkbox\" style=\"margin:0 0 0 4px; padding: 0 0 0 4px;\" ";
-            // line 133
+            // line 144
             if ($this->getAttribute(($context["imprime"] ?? null), "ituUsed", array())) {
                 echo " checked ";
             }
@@ -276,7 +293,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                 <div class=\"form-group\">
                                                     <label>Imprimé technique</label>
                                                     <input value=\"";
-            // line 144
+            // line 155
             echo twig_escape_filter($this->env, twig_upper_filter($this->env, $this->getAttribute($this->getAttribute(($context["imprime"] ?? null), "ctImprimeTech", array()), "nomImprimeTech", array())), "html", null, true);
             echo "\" class=\"form-control\" disabled />
                                                 </div>
@@ -285,7 +302,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                 <div class=\"form-group\">
                                                     <label>Motif d'utilisation IT</label>
                                                     <input value=\"";
-            // line 150
+            // line 161
             echo twig_escape_filter($this->env, $this->getAttribute(($context["imprime"] ?? null), "ituMotifUsed", array()), "html", null, true);
             echo "\" class=\"form-control\" disabled />
                                                 </div>
@@ -296,7 +313,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                 <div class=\"form-group\">
                                                     <label>N° contröle / N° d'enregistrement</label>
                                                     <input value=\"";
-            // line 158
+            // line 169
             echo twig_escape_filter($this->env, $this->getAttribute(($context["imprime"] ?? null), "ctControle", array()), "html", null, true);
             echo "\" class=\"form-control\" disabled />
                                                 </div>
@@ -305,19 +322,19 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                 <div class=\"form-group\" style=\"margin: 12px 0 0 0; padding: 12px 0 0 0;\">
                                                     <a class=\"btn btn-warning\" title=\"Modifier\"
                                                     href=\"";
-            // line 164
+            // line 175
             echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_edit", array("id" => $this->getAttribute(($context["imprime"] ?? null), "id", array()))), "html", null, true);
             echo "\">
                                                         <i class=\"fa fa-edit\"></i>
                                                         Modifier
                                                     </a>
                                                     ";
-            // line 168
+            // line 179
             if ($this->getAttribute(($context["imprime"] ?? null), "ituUsed", array())) {
-                // line 169
+                // line 180
                 echo "                                                    <a class=\"btn btn-default\" title=\"Annuler utilisation\"
                                                     href=\"";
-                // line 170
+                // line 181
                 echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_reset", array("id" => $this->getAttribute(($context["imprime"] ?? null), "id", array()))), "html", null, true);
                 echo "\">
                                                         <i class=\"fa fa-trash\"></i>
@@ -325,7 +342,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                                                     </a>
                                                     ";
             }
-            // line 175
+            // line 186
             echo "                                                </div>
                                             </div>
                                         </div>
@@ -335,7 +352,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
                         </div>
                         ";
         }
-        // line 183
+        // line 194
         echo "                    </div>
                 </div>
             </div>
@@ -344,10 +361,10 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
 ";
     }
 
-    // line 190
+    // line 201
     public function block_javascripts($context, array $blocks = array())
     {
-        // line 191
+        // line 202
         echo "    ";
         $this->displayParentBlock("javascripts", $context, $blocks);
         echo "
@@ -355,17 +372,17 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
     <!-- Vérification existence carte grise -->
     <!-- JQuery UI -->
     <script src=\"";
-        // line 195
+        // line 206
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("plugins/jquery-ui-1.12.1/jquery-ui.js"), "html", null, true);
         echo "\" ></script>
     <script>
         var _recuperer_numero_it_ajax_uri = \"";
-        // line 197
+        // line 208
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_search");
         echo "\";
     </script>
     <script src=\"";
-        // line 199
+        // line 210
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("backoffice/js/search.used_it.js"), "html", null, true);
         echo "\"></script>
 ";
@@ -383,7 +400,7 @@ class __TwigTemplate_cc843bb5d5926f0e48d388ab9749e795bc728270b7218a95a50458649d4
 
     public function getDebugInfo()
     {
-        return array (  369 => 199,  364 => 197,  359 => 195,  351 => 191,  348 => 190,  339 => 183,  329 => 175,  321 => 170,  318 => 169,  316 => 168,  309 => 164,  300 => 158,  289 => 150,  280 => 144,  264 => 133,  256 => 128,  245 => 120,  236 => 114,  222 => 102,  220 => 101,  217 => 100,  214 => 99,  203 => 91,  197 => 87,  195 => 86,  185 => 79,  179 => 75,  177 => 74,  159 => 59,  151 => 53,  142 => 50,  137 => 49,  133 => 48,  130 => 47,  124 => 44,  119 => 43,  117 => 42,  98 => 27,  96 => 26,  87 => 23,  84 => 22,  79 => 21,  70 => 18,  67 => 17,  62 => 16,  59 => 15,  53 => 9,  46 => 6,  43 => 5,  36 => 3,  32 => 1,  30 => 13,  28 => 12,  11 => 1,);
+        return array (  386 => 210,  381 => 208,  376 => 206,  368 => 202,  365 => 201,  356 => 194,  346 => 186,  338 => 181,  335 => 180,  333 => 179,  326 => 175,  317 => 169,  306 => 161,  297 => 155,  281 => 144,  273 => 139,  262 => 131,  253 => 125,  239 => 113,  237 => 112,  229 => 107,  222 => 103,  217 => 100,  214 => 99,  203 => 91,  197 => 87,  195 => 86,  185 => 79,  179 => 75,  177 => 74,  159 => 59,  151 => 53,  142 => 50,  137 => 49,  133 => 48,  130 => 47,  124 => 44,  119 => 43,  117 => 42,  98 => 27,  96 => 26,  87 => 23,  84 => 22,  79 => 21,  70 => 18,  67 => 17,  62 => 16,  59 => 15,  53 => 9,  46 => 6,  43 => 5,  36 => 3,  32 => 1,  30 => 13,  28 => 12,  11 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */

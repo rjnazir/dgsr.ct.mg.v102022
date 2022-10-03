@@ -82,11 +82,27 @@
                     </div>
 
                     <div class="box-footer">
-                        <input type="submit" class="btn btn-primary" value="Modifier" name="update_it_in_bl"/>
-                        {# <a href="{{ path('bordereau_index') }}"
-                           class="btn btn-default pull-left btn-mini-rectif" >
-                            Retour à la liste
-                        </a> #}
+                        <div class="row">
+                            <div class="col-xs-12" >
+                                <input type="submit" class="btn btn-primary" value="Modifier" name="update_it_in_bl"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-xs-12" >
+                                <a href="{{ path('imprime_tech_use_index') }}" class="btn btn-light" >
+                                    Retour à la liste
+                                </a>
+
+                                <a href="{{ path('imprime_tech_use_search') }}" class="btn btn-default" >
+                                    Retour à la rechercher
+                                </a>
+
+                                <a href="{{ path('imprime_tech_use_new') }}" class="btn btn-info" >
+                                    Retour à l'ajout multiple
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 {{ form_end(edit_form) }}
             </div>

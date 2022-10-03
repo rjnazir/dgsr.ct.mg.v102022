@@ -197,12 +197,39 @@ class __TwigTemplate_a6678cefebf91447abd04d188589dd7eef8ab1f10667f962ef12a3e5b56
                     </div>
 
                     <div class=\"box-footer\">
-                        <input type=\"submit\" class=\"btn btn-primary\" value=\"Modifier\" name=\"update_it_in_bl\"/>
-                        ";
-        // line 90
-        echo "                    </div>
+                        <div class=\"row\">
+                            <div class=\"col-xs-12\" >
+                                <input type=\"submit\" class=\"btn btn-primary\" value=\"Modifier\" name=\"update_it_in_bl\"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class=\"row\">
+                            <div class=\"col-xs-12\" >
+                                <a href=\"";
+        // line 93
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_index");
+        echo "\" class=\"btn btn-light\" >
+                                    Retour à la liste
+                                </a>
+
+                                <a href=\"";
+        // line 97
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_search");
+        echo "\" class=\"btn btn-default\" >
+                                    Retour à la rechercher
+                                </a>
+
+                                <a href=\"";
+        // line 101
+        echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprime_tech_use_new");
+        echo "\" class=\"btn btn-info\" >
+                                    Retour à l'ajout multiple
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 ";
-        // line 91
+        // line 107
         echo         $this->env->getRuntime('Symfony\Bridge\Twig\Form\TwigRenderer')->renderBlock(($context["edit_form"] ?? null), 'form_end');
         echo "
             </div>
@@ -211,29 +238,29 @@ class __TwigTemplate_a6678cefebf91447abd04d188589dd7eef8ab1f10667f962ef12a3e5b56
 ";
     }
 
-    // line 97
+    // line 113
     public function block_javascripts($context, array $blocks = array())
     {
-        // line 98
+        // line 114
         echo "
     <script src=\"";
-        // line 99
+        // line 115
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("plugins/jquery-ui-1.12.1/jquery-ui.js"), "html", null, true);
         echo "\" ></script>
     <script type=\"text/javascript\">
         ";
-        // line 101
+        // line 117
         $this->displayParentBlock("javascripts", $context, $blocks);
         echo "
 
         var _check_ct_controle_ids_ajax_uri = \"";
-        // line 103
+        // line 119
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("imprimes_tech_test_ct_controle_ajax");
         echo "\";
 
     </script>
     <script src=\"";
-        // line 106
+        // line 122
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("backoffice/js/imprime.tech.use.js"), "html", null, true);
         echo "\"></script>
 
@@ -252,7 +279,7 @@ class __TwigTemplate_a6678cefebf91447abd04d188589dd7eef8ab1f10667f962ef12a3e5b56
 
     public function getDebugInfo()
     {
-        return array (  237 => 106,  231 => 103,  226 => 101,  221 => 99,  218 => 98,  215 => 97,  206 => 91,  203 => 90,  195 => 81,  188 => 77,  181 => 73,  174 => 69,  167 => 65,  160 => 61,  151 => 55,  145 => 51,  136 => 48,  133 => 47,  128 => 46,  119 => 43,  116 => 42,  111 => 41,  108 => 40,  101 => 35,  96 => 31,  94 => 30,  92 => 29,  86 => 26,  84 => 25,  82 => 24,  80 => 23,  78 => 22,  73 => 19,  66 => 18,  64 => 17,  58 => 16,  54 => 14,  51 => 12,  49 => 11,  46 => 10,  42 => 1,  40 => 38,  38 => 37,  36 => 8,  34 => 7,  32 => 6,  30 => 5,  28 => 3,  11 => 1,);
+        return array (  264 => 122,  258 => 119,  253 => 117,  248 => 115,  245 => 114,  242 => 113,  233 => 107,  224 => 101,  217 => 97,  210 => 93,  195 => 81,  188 => 77,  181 => 73,  174 => 69,  167 => 65,  160 => 61,  151 => 55,  145 => 51,  136 => 48,  133 => 47,  128 => 46,  119 => 43,  116 => 42,  111 => 41,  108 => 40,  101 => 35,  96 => 31,  94 => 30,  92 => 29,  86 => 26,  84 => 25,  82 => 24,  80 => 23,  78 => 22,  73 => 19,  66 => 18,  64 => 17,  58 => 16,  54 => 14,  51 => 12,  49 => 11,  46 => 10,  42 => 1,  40 => 38,  38 => 37,  36 => 8,  34 => 7,  32 => 6,  30 => 5,  28 => 3,  11 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */

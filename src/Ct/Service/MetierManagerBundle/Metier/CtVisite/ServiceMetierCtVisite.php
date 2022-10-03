@@ -436,7 +436,7 @@ class ServiceMetierCtVisite
         $_filename              = str_replace(' ', '_', $_num_pv_upper);
 
         $_path                  = $_reporting_directory . PathReportingName::GENERATE_VISITE_CARTE_VISITE;
-        $_dest_tmp              = $_path . $_filename . '.docx';
+        $_dest_tmp              = $_path . $_filename .'_'.date('ndhms').'.docx';
         $_file_without_ext      = $_filename;
 
         $_url_scheme            = $this->_container->get('request_stack')->getCurrentRequest()->server->get('HTTP_HOST');
@@ -908,7 +908,7 @@ class ServiceMetierCtVisite
         if ($_is_omavet) {
             $_template_omavet_src     = $_pv_directory . PathReportingName::TEMPLATE_VISITE_FEUILLE_CAISSE_OMAVET;
             /* $_num_pv_omavet           = 'feuille_de_caisse_omavet_' . $_date_parsed; */
-            $_num_pv_omavet           = 'feuille_de_caisse_omavet_' . date('Yndhms');
+            $_num_pv_omavet           = 'feuille_de_caisse_omavet_' . date('ndhms');
             $_filename_omavet         = strtoupper($_num_pv_omavet);
             $_dest_tmp_omavet         = $_path . $_filename_omavet . '.docx';
             $_file_without_ext_omavet = $_filename_omavet;
@@ -919,7 +919,7 @@ class ServiceMetierCtVisite
         }
 
         /* $_num_pv   = 'feuille_de_caisse_' . $_code_centre . '_' . $_code_province . '_' . $_date_parsed; */
-        $_num_pv   = 'feuille_de_caisse_' . $_code_centre . '_' . $_code_province . '_' . date('Yndhms');
+        $_num_pv   = 'feuille_de_caisse_' . $_code_centre . '_' . $_code_province . '_' . date('ndhms');
         $_filename = strtoupper($_num_pv);
 
         $_dest_tmp         = $_path . $_filename . '.docx';
@@ -1383,7 +1383,7 @@ class ServiceMetierCtVisite
         $_template              = $_pv_directory . PathReportingName::TEMPLATE_VISITE_FICHE_VERIFICATEUR;
         $_date_parsed           = str_replace('-', '_', date('d-m-Y'));
         /* $_num_pv                = 'fiche_verificateur_' . $_code_centre . '_' . $_code_province . '_' . $_date_parsed; */
-        $_num_pv                = 'fiche_verificateur_' . $_code_centre . '_' . $_code_province . '_' . date('Yndhms');
+        $_num_pv                = 'fiche_verificateur_' . $_code_centre . '_' . $_code_province . '_' . date('ndhms');
         $_filename              = strtoupper($_num_pv);
 
         $_path                  = $_pv_directory . PathReportingName::GENERATE_VISITE_FICHE_VERIFICATEUR;
@@ -1524,7 +1524,7 @@ class ServiceMetierCtVisite
         $_filename              = str_replace('/', '_', $_num_pv);
         $_filename              = str_replace(' ', '_', $_filename);
         /* $_filename              = strtoupper($_filename); */
-        $_filename              = strtoupper($_filename). date('Yndhms');
+        $_filename              = strtoupper($_filename).'_'. date('ndhms');
 
         $_dest_tmp              = $_path . $_filename . '.docx';
         $_file_without_ext      = $_filename;
@@ -1772,7 +1772,7 @@ class ServiceMetierCtVisite
         $_template              = $_pv_directory . PathReportingName::TEMPLATE_VISITE_FICHE_ANOMALIE;
         $_date_parsed           = str_replace('-', '_', date('d-m-Y'));
         /* $_num_pv                = 'liste_anomalies_' . $_code_centre . '_' . $_code_province . '_' . $_date_parsed; */
-        $_num_pv                = 'liste_anomalies_' . $_code_centre . '_' . $_code_province . '_' . date('Yndhms');
+        $_num_pv                = 'liste_anomalies_' . $_code_centre . '_' . $_code_province . '_' . date('ndhms');
         $_filename              = strtoupper($_num_pv);
 
         $_path                  = $_pv_directory . PathReportingName::GENERATE_VISITE_FICHE_ANOMALIE;
