@@ -367,8 +367,8 @@ class ServiceMetierCtConstatationAvDedouanement
      * @return string
      */
     public function convertToPdf($_path, $_file_without_ext) {
-        $_file_docx = $_file_without_ext .'_' . date('Yndhms') . ".docx";
-        $_file_pdf = $_file_without_ext .'_' . date('Yndhms') . ".pdf";
+        $_file_docx = $_file_without_ext . ".docx";
+        $_file_pdf = $_file_without_ext . ".pdf";
         $_source_tmp = $_path . $_file_docx;
         $_dest_tmp = $_path . $_file_pdf;
         $_libreoffice_path = $this->_container->getParameter('libreoffice_path');

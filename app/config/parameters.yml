@@ -13,4 +13,6 @@ parameters:
     libreoffice_linux_path: '/usr/bin/libreoffice --headless -env:UserInstallation=file:///tmp --convert-to pdf'
     libreoffice_mac_path: '/Applications/LibreOffice.app/Contents/MacOS/soffice  --headless --convert-to pdf'
     libreoffice_win_path: '"C:\Program Files\LibreOffice\program\soffice.exe" --headless --convert-to pdf'
+    # lo_path: '%libreoffice_linux_path%'
+    # lo_path: '%libreoffice_mac_path%'
     lo_path: '%libreoffice_win_path%'

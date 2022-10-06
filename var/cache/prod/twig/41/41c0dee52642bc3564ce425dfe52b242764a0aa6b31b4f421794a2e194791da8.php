@@ -234,8 +234,8 @@ class __TwigTemplate_e7bfb5810bfc489c2010d2a72b206d78bc71bf0d65245c31f657908f64f
                             <div class=\"row\">
                                 <div class=\"form-group\">
                                     <label for=\"ct_mois_stock\">Sélectionner le mois à traitement</label>
-                                    <input required id=\"ct_mois_stock\" name=\"ct_mois_stock\" class=\"form-control monthpicker\"
-                                            type=\"month\" />
+                                    <input required id=\"ct_mois_stock\" name=\"ct_mois_stock\"
+                                            class=\"form-control monthpicker\" type=\"month\" />
                                 </div>
                             </div>
 
