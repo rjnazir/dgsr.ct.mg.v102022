@@ -350,12 +350,12 @@ class __TwigTemplate_e39fddf324023963692ef4f70707e50a2eb8b04474b282d1aaf6e204f64
                 echo twig_escape_filter($this->env, $this->getAttribute($context["choice"], "value", array()), "html", null, true);
                 echo "\"";
                 if ($this->getAttribute($context["choice"], "attr", array())) {
-                    $__internal_f49331429f7c2b6efdce11efda9f3ad640717f7cd4aac43ce9092a66c4bac26e = array("attr" => $this->getAttribute($context["choice"], "attr", array()));
-                    if (!is_array($__internal_f49331429f7c2b6efdce11efda9f3ad640717f7cd4aac43ce9092a66c4bac26e)) {
+                    $__internal_f9f2214361ff5eb8781c0be3dae1f1a58fa9b250038a8ef30753c9378237112e = array("attr" => $this->getAttribute($context["choice"], "attr", array()));
+                    if (!is_array($__internal_f9f2214361ff5eb8781c0be3dae1f1a58fa9b250038a8ef30753c9378237112e)) {
                         throw new Twig_Error_Runtime('Variables passed to the "with" tag must be a hash.');
                     }
                     $context['_parent'] = $context;
-                    $context = array_merge($context, $__internal_f49331429f7c2b6efdce11efda9f3ad640717f7cd4aac43ce9092a66c4bac26e);
+                    $context = array_merge($context, $__internal_f9f2214361ff5eb8781c0be3dae1f1a58fa9b250038a8ef30753c9378237112e);
                     $this->displayBlock("attributes", $context, $blocks);
                     $context = $context['_parent'];
                 }
@@ -777,12 +777,12 @@ $this->env->getRuntime('Symfony\Bridge\Twig\Form\TwigRenderer')->searchAndRender
             // line 262
             echo "<label";
             if (($context["label_attr"] ?? null)) {
-                $__internal_04ce8374f4c05a1ea8931fe232c32955f8f612329282e3bc9fe458fdbb02ba67 = array("attr" => ($context["label_attr"] ?? null));
-                if (!is_array($__internal_04ce8374f4c05a1ea8931fe232c32955f8f612329282e3bc9fe458fdbb02ba67)) {
+                $__internal_39a57bcbed65fe4a37807d80dec3d2202697be9ce15abd833b5bf9f2dff843f6 = array("attr" => ($context["label_attr"] ?? null));
+                if (!is_array($__internal_39a57bcbed65fe4a37807d80dec3d2202697be9ce15abd833b5bf9f2dff843f6)) {
                     throw new Twig_Error_Runtime('Variables passed to the "with" tag must be a hash.');
                 }
                 $context['_parent'] = $context;
-                $context = array_merge($context, $__internal_04ce8374f4c05a1ea8931fe232c32955f8f612329282e3bc9fe458fdbb02ba67);
+                $context = array_merge($context, $__internal_39a57bcbed65fe4a37807d80dec3d2202697be9ce15abd833b5bf9f2dff843f6);
                 $this->displayBlock("attributes", $context, $blocks);
                 $context = $context['_parent'];
             }
