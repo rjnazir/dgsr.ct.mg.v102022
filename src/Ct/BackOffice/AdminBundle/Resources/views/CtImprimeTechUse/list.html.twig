@@ -1,0 +1,152 @@
+{% extends 'backoffice/base_admin.html.twig' %}
+
+{% block title %}{{ parent() }} Liste des imprimés technique non utilisées {% endblock %}
+
+{% set menu_imprime_tech_use      = true %}
+{% set menu_imprime_tech_use_list = true %}
+
+{% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="callout callout-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('warning') %}
+        <div class="callout callout-warning">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="callout callout-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+
+    {% for key, messages in app.session.flashbag.all() %}
+        <div class="callout callout-{{ key }}">
+            {{ messages }} <br />
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Liste des imprimés technique non utilisées</h3>
+                </div>
+
+                <div class="box-body">
+                    <div class="modal-body">
+                        <div class="row">
+
+                            <form action="#" method="POST" class="form-search">
+                                <div class="box-body table-responsive">
+                                    <table id="liste-imprime-tech-bl" class="table table-bordered table-striped table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Type imprimé technique</th>
+                                            <th>Numéro de l'imprimé</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for itu_liste in itu_listes %}
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" value="{{ itu_liste.id }}" name="delete[]" />
+                                                </td>
+                                                <td>{{ itu_liste.ctImprimeTech.nomImprimeTech }}</td>
+                                                <td>{{ itu_liste.ituNumero }}</td>
+                                                <td>
+                                                    <a class="btn btn-primary" title="Modifier"
+                                                    href="{{ path('imprime_tech_use_edit', { 'id': itu_liste.id }) }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-warning">
+                <div class="box-body">
+                    <a href="{{ path('imprime_tech_use_index') }}"
+                        class="btn btn-ligth" >
+                        Retour à la liste des utilisées
+                    </a>
+
+                    <a href="{{ path('imprime_tech_use_search') }}"
+                        class="btn btn-default" >
+                        Retour à la recherche
+                    </a>
+
+                    <a href="{{ path('imprime_tech_use_new') }}"
+                        class="btn btn-info" >
+                        Retour à l'ajout multiple
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <!-- Vérification existence carte grise -->
+    <!-- JQuery UI -->
+    <script src="{{ asset('plugins/jquery-ui-1.12.1/jquery-ui.js') }}" ></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#liste-imprime-tech-bl').DataTable(
+            {
+                "order": [[ 0, "desc" ]],
+                "bProcessing": true,
+                "bFilter": true,
+                "oLanguage": {
+                    "sProcessing": "Traitement...",
+                    "oPaginate": {
+                        "sPrevious": "Précédente", // This is the link to the previous page
+                        "sNext": "Suivante", // This is the link to the next page
+                    },
+                    "sSearch": "Filtrer: ",
+                    "sLengthMenu": "Afficher _MENU_ enregistrement par page",
+                    "sEmptyTable": "Aucune marque trouvée",
+                    "sInfo": "Voir _TOTAL_ de _PAGE_ pour _PAGES_ entrées",
+                },
+                "footerCallback": function ( row, data, start, end, display ) {
+                    $('.title-count').html(display.length);
+                }
+            });
+        });
+
+        $(document).ready(function() {
+            $('#ct_mois_stock').on('select change', function() {
+                if($(this).val() != '') {
+                    $('#btn-generate-new-stock-it').prop('disabled', false);
+                } else {
+                    $('#btn-generate-new-stock-it').prop('disabled', true);
+                }
+            });
+        });
+
+        var _generate_used_it_ajax_uri = "{{ path('imprimes_tech_generate_used_ajax') }}";
+        var _generate_stock_it_ajax_uri = "{{ path('imprimes_tech_stock_generate_ajax') }}";
+        var _generate_new_stok_it_ajax_uri = "{{ path('imprimes_tech_new_stock_generate_ajax') }}";
+    </script>
+    <script src="{{ asset('backoffice/js/index.imprimes.js') }}"></script>
+{% endblock %}
