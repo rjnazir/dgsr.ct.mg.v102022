@@ -3,6 +3,11 @@ imprime_tech_use_index:
     defaults: { _controller: "AdminBundle:CtImprimeTechUse:index" }
     methods:  GET
 
+imprime_tech_use_list:
+    path:     /list
+    defaults: { _controller: "AdminBundle:CtImprimeTechUse:list" }
+    methods:  GET
+
 imprime_tech_use_new:
     path:     /new
     defaults: { _controller: "AdminBundle:CtImprimeTechUse:new" }

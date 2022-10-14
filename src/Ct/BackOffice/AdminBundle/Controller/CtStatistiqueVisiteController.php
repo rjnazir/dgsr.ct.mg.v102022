@@ -32,7 +32,6 @@ class CtStatistiqueVisiteController extends Controller
         $_statistique_visite_manager = $this->get(ServiceName::SRV_METIER_STATISTIQUE_VISITE);
 //        $_visites = $_statistique_visite_manager->getTotalVisiteByUsage(4, 2017);
 //        $_visites = $_statistique_visite_manager->generateReportingByInterval(5, 2017, 4, 'trimestriel');
-//        var_dump($_visites);die;
 
         // Récupérer tout les provinces et les centres
         $_centres   = $_centre_manager->getAllCtCentreByOrder(array('id' => 'ASC'));

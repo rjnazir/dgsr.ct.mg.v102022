@@ -138,18 +138,16 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
             foreach ($context['_seq'] as $context["_key"] => $context["centre"]) {
                 // line 49
                 echo "                                                        ";
-                if (($this->getAttribute($context["province"], "id", array()) == $this->getAttribute($this->getAttribute($context["centre"], "ctProvince", array()), "id", array()))) {
-                    // line 50
-                    echo "                                                            <option value=\"";
-                    echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "id", array()), "html", null, true);
-                    echo "\">
+                // line 50
+                echo "                                                            <option value=\"";
+                echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "id", array()), "html", null, true);
+                echo "\">
                                                                 ";
-                    // line 51
-                    echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "ctrNom", array()), "html", null, true);
-                    echo "
+                // line 51
+                echo twig_escape_filter($this->env, $this->getAttribute($context["centre"], "ctrNom", array()), "html", null, true);
+                echo "
                                                             </option>
                                                         ";
-                }
                 // line 54
                 echo "                                                    ";
             }
@@ -232,9 +230,7 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
                             </div>
                         </div>
 
-";
-        // line 170
-        echo "                    </div>
+                    </div>
 
                     <div class=\"modal-footer\">
                         <div class=\"col-md-4\">
@@ -253,8 +249,8 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
 
     <div class=\"row\">
         ";
-        // line 189
-        echo "        <div class=\"col-md-2 kl-bloc-stat\">
+        // line 144
+        echo "        <div class=\"col-md-3 kl-bloc-stat\">
             <div class=\"box box-primary\">
                 <div class=\"box-header\">
                     <h3 class=\"box-title\">Annuel</h3>
@@ -273,8 +269,8 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
         </div>
 
         ";
-        // line 208
-        echo "        <div class=\"col-md-2 kl-bloc-stat\">
+        // line 163
+        echo "        <div class=\"col-md-3 kl-bloc-stat\">
             <div class=\"box box-primary\">
                 <div class=\"box-header\">
                     <h3 class=\"box-title\">Semestriel</h3>
@@ -293,8 +289,8 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
         </div>
 
         ";
-        // line 227
-        echo "        <div class=\"col-md-2 kl-bloc-stat\">
+        // line 182
+        echo "        <div class=\"col-md-3 kl-bloc-stat\">
             <div class=\"box box-primary\">
                 <div class=\"box-header\">
                     <h3 class=\"box-title\">Trimestriel</h3>
@@ -313,8 +309,8 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
         </div>
 
         ";
-        // line 246
-        echo "        <div class=\"col-md-2 kl-bloc-stat\">
+        // line 201
+        echo "        <div class=\"col-md-3 kl-bloc-stat\">
             <div class=\"box box-primary\">
                 <div class=\"box-header\">
                     <h3 class=\"box-title\">Mensuel</h3>
@@ -332,65 +328,26 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
             </div>
         </div>
 
-        ";
-        // line 265
-        echo "        <div class=\"col-md-2 kl-bloc-stat\">
-            <div class=\"box box-primary\">
-                <div class=\"box-header\">
-                    <h3 class=\"box-title\">Hebdomadaire</h3>
-                </div>
-
-                <div class=\"box-body\">
-                    <i class=\"fa fa-file-word-o\"></i> Cliquer sur le boutton pour générer
-                </div>
-
-                <div class=\"box-footer\">
-                    <input data-toggle=\"modal\" data-target=\"#modal-generate\" type=\"button\"
-                           onclick=\"setTypeBilan('hebdomadaire');\" class=\"btn btn-primary\"
-                           value=\"Générer\" name=\"generate_statistique_visite\"/>
-                </div>
-            </div>
-        </div>
-
-        ";
-        // line 284
-        echo "        <div class=\"col-md-2 kl-bloc-stat\">
-            <div class=\"box box-primary\">
-                <div class=\"box-header\">
-                    <h3 class=\"box-title\">Journalier</h3>
-                </div>
-
-                <div class=\"box-body\">
-                    <i class=\"fa fa-file-word-o\"></i> Cliquer sur le boutton pour générer
-                </div>
-
-                <div class=\"box-footer\">
-                    <input data-toggle=\"modal\" data-target=\"#modal-generate\" type=\"button\"
-                           onclick=\"setTypeBilan('journalier');\" class=\"btn btn-primary\"
-                           value=\"Générer\" name=\"generate_statistique_visite\"/>
-                </div>
-            </div>
-        </div>
     </div>
 ";
     }
 
-    // line 304
+    // line 222
     public function block_javascripts($context, array $blocks = array())
     {
-        // line 305
+        // line 223
         echo "    ";
         $this->displayParentBlock("javascripts", $context, $blocks);
         echo "
 
     <script>
         var _generate_reporting_ajax_uri = \"";
-        // line 308
+        // line 226
         echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("statistique_visite_generate_reporting_annuel_ajax");
         echo "\";
     </script>
     <script src=\"";
-        // line 310
+        // line 228
         echo twig_escape_filter($this->env, $this->env->getExtension('Symfony\Bridge\Twig\Extension\AssetExtension')->getAssetUrl("backoffice/js/statistique.visite.js"), "html", null, true);
         echo "\"></script>
 ";
@@ -408,7 +365,7 @@ class __TwigTemplate_5b6f4bfe1b277267a63e5b977735161629c99d244beb2bafae5af28fbd6
 
     public function getDebugInfo()
     {
-        return array (  394 => 310,  389 => 308,  382 => 305,  379 => 304,  357 => 284,  337 => 265,  317 => 246,  297 => 227,  277 => 208,  257 => 189,  237 => 170,  167 => 57,  160 => 55,  154 => 54,  148 => 51,  143 => 50,  140 => 49,  136 => 48,  131 => 47,  127 => 46,  115 => 39,  98 => 24,  89 => 21,  84 => 20,  80 => 19,  77 => 18,  68 => 15,  65 => 14,  60 => 13,  51 => 10,  48 => 9,  43 => 8,  40 => 7,  33 => 3,  29 => 1,  27 => 5,  11 => 1,);
+        return array (  351 => 228,  346 => 226,  339 => 223,  336 => 222,  313 => 201,  293 => 182,  273 => 163,  253 => 144,  165 => 57,  158 => 55,  152 => 54,  147 => 51,  142 => 50,  140 => 49,  136 => 48,  131 => 47,  127 => 46,  115 => 39,  98 => 24,  89 => 21,  84 => 20,  80 => 19,  77 => 18,  68 => 15,  65 => 14,  60 => 13,  51 => 10,  48 => 9,  43 => 8,  40 => 7,  33 => 3,  29 => 1,  27 => 5,  11 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */

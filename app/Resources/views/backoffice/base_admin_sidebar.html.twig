@@ -966,20 +966,25 @@
                             <ul class="treeview-menu">
                                 {% if  is_granted('ROLE_ADMIN') or is_granted('ROLE_RECEPTION') or is_granted('ROLE_VISITE') or is_granted('ROLE_APPROVISIONNEMENT') %}
                                 <li class="{% if menu_imprime_tech_use_list is defined %}{{ active }}{% endif %}">
-                                    <a href="{{ path('imprime_tech_use_index') }}"><i class="fa fa-search"></i> Liste des IT utilisés</a>
+                                    <a href="{{ path('imprime_tech_use_index') }}"><i class="fa fa-list-alt"></i> Liste des utilisés</a>
+                                </li>
+                                {% endif %}
+                                {% if  is_granted('ROLE_ADMIN') or is_granted('ROLE_RECEPTION') or is_granted('ROLE_VISITE') or is_granted('ROLE_APPROVISIONNEMENT') %}
+                                <li class="{% if menu_imprime_tech_use_list is defined %}{{ active }}{% endif %}">
+                                    <a href="{{ path('imprime_tech_use_list') }}"><i class="fa fa-list"></i> Liste des non utilisés</a>
                                 </li>
                                 {% endif %}
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_RECEPTION') or is_granted('ROLE_VISITE') or is_granted('ROLE_APPROVISIONNEMENT') %}
                                 {% if is_granted('ROLE_RECEPTION') or is_granted('ROLE_VISITE') %}
                                 <li class="{% if menu_imprime_tech_use_search is defined %}{{ active }}{% endif %}">
-                                    <a href="{{ path('imprime_tech_use_new') }}"><i class="fa fa-list-ol"></i> Mise à jour multiple IT</a>
+                                    <a href="{{ path('imprime_tech_use_search') }}"><i class="fa fa-plus"></i> Mise à jour utilisation</a>
                                 </li>
                                 <li class="{% if menu_imprime_tech_use_search is defined %}{{ active }}{% endif %}">
-                                    <a href="{{ path('imprime_tech_use_search') }}"><i class="fa fa-list-ol"></i> Mise à jour utilisation IT</a>
+                                    <a href="{{ path('imprime_tech_use_new') }}"><i class="fa fa-plus-square"></i> Mise à jour multiple</a>
                                 </li>
                                 {% endif %}
                                 <li class="{% if menu_imprime_tech_use_stat is defined %}{{ active }}{% endif %}">
-                                    <a href="{{ path('imprimes_tech_use_statistic') }}"><i class="fa fa-bar-chart"></i> Statistique utilisation IT</a>
+                                    <a href="{{ path('imprimes_tech_use_statistic') }}"><i class="fa fa-bar-chart"></i> Statistique d'utilisation</a>
                                 </li>
                                 {% endif %}
                             </ul>

@@ -3283,6 +3283,17 @@ class appProdProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBundle\R
                     }
                     not_imprime_tech_use_index:
 
+                    // imprime_tech_use_list
+                    if ('/admin/imprime-tech-use/list' === $pathinfo) {
+                        if ('GET' !== $canonicalMethod) {
+                            $allow[] = 'GET';
+                            goto not_imprime_tech_use_list;
+                        }
+
+                        return array (  '_controller' => 'Ct\\BackOffice\\AdminBundle\\Controller\\CtImprimeTechUseController::listAction',  '_route' => 'imprime_tech_use_list',);
+                    }
+                    not_imprime_tech_use_list:
+
                     // imprime_tech_use_new
                     if ('/admin/imprime-tech-use/new' === $pathinfo) {
                         if (!in_array($canonicalMethod, array('GET', 'POST'))) {

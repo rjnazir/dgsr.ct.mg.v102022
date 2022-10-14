@@ -39,6 +39,30 @@ class CtImprimeTechUseController extends Controller
     }
 
     /**
+     * Afficher toutes les utilisations d'imprimé technique
+     * @return Render page
+     */
+    public function listAction()
+    {
+        // Récupérer manager
+        $_itu_manager = $this->get(ServiceName::SRV_METIER_IMPRIME_TECH_USE);
+
+        // Récupérer tout les provinces et les centres
+        $_province_manager  = $this->get(ServiceName::SRV_METIER_PROVINCE);
+        $_centre_manager    = $this->get(ServiceName::SRV_METIER_CENTRE);
+        $_centres   = $_centre_manager->getAllCtCentreByOrder(array('id' => 'ASC'));
+        $_provinces = $_province_manager->getAllCtProvinceByOrder(array('id' => 'ASC'));
+        
+        // Récupérer tout les imprimés tech
+        $_itu_list = $_itu_manager->getAllCtImprimeTechNoUsedOrder();
+        return $this->render('AdminBundle:CtImprimeTechUse:list.html.twig', array(
+            'itu_listes' => $_itu_list,
+            'centres' => $_centres,
+            'provinces' => $_provinces,
+        ));
+    }
+
+    /**
      * Mise à jour utlisation IT multiples
      * @param Request $_request requête
      * @return Render page

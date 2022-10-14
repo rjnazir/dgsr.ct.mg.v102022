@@ -133,6 +133,7 @@
   'AdminBundle:CtImprimeTechUse:add.html.twig' => __DIR__.'/../../../src/Ct/BackOffice/AdminBundle/Resources/views/CtImprimeTechUse/add.html.twig',
   'AdminBundle:CtImprimeTechUse:edit.html.twig' => __DIR__.'/../../../src/Ct/BackOffice/AdminBundle/Resources/views/CtImprimeTechUse/edit.html.twig',
   'AdminBundle:CtImprimeTechUse:index.html.twig' => __DIR__.'/../../../src/Ct/BackOffice/AdminBundle/Resources/views/CtImprimeTechUse/index.html.twig',
+  'AdminBundle:CtImprimeTechUse:list.html.twig' => __DIR__.'/../../../src/Ct/BackOffice/AdminBundle/Resources/views/CtImprimeTechUse/list.html.twig',
   'AdminBundle:CtImprimeTechUse:search.html.twig' => __DIR__.'/../../../src/Ct/BackOffice/AdminBundle/Resources/views/CtImprimeTechUse/search.html.twig',
   'AdminBundle:CtImprimeTechUse:stat.html.twig' => __DIR__.'/../../../src/Ct/BackOffice/AdminBundle/Resources/views/CtImprimeTechUse/stat.html.twig',
   'AdminBundle:CtImprimeTechUse:used.html.twig' => __DIR__.'/../../../src/Ct/BackOffice/AdminBundle/Resources/views/CtImprimeTechUse/used.html.twig',

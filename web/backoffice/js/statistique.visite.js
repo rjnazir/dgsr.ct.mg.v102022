@@ -15,21 +15,31 @@ function setTypeBilan(_type) {
         $('.kl-semestriel').removeClass('hide');
         $('.kl-trimestriel').addClass('hide');
         $('.kl-mensuel').addClass('hide');
+        $('.kl-week').addClass('hide');
     }
     if (_type == 'trimestriel') {
         $('.kl-trimestriel').removeClass('hide');
         $('.kl-semestriel').addClass('hide');
         $('.kl-mensuel').addClass('hide');
+        $('.kl-week').addClass('hide');
     }
     if (_type == 'mensuel') {
         $('.kl-mensuel').removeClass('hide');
         $('.kl-semestriel').addClass('hide');
         $('.kl-trimestriel').addClass('hide');
+        $('.kl-week').addClass('hide');
+    }
+    if (_type == 'hebdomadaire') {
+        $('.kl-semestriel').addClass('hide');
+        $('.kl-trimestriel').addClass('hide');
+        $('.kl-mensuel').addClass('hide');
+        $('.kl-week').removeClass('hide');
     }
     if (_type == 'annuel') {
         $('.kl-semestriel').addClass('hide');
         $('.kl-trimestriel').addClass('hide');
         $('.kl-mensuel').addClass('hide');
+        $('.kl-week').addClass('hide');
     }
 }
 
@@ -37,14 +47,15 @@ function setTypeBilan(_type) {
  * Ajax pour générer le bilan visite par type (annuel, mensuel, trimestriel)
  */
 function ajaxGenerateStatistiqueVisite() {
-    var _loading   = "<i class='fa-li fa fa-spinner fa-spin'></i>";
-    var _id_centre = $('#ct-centre').val();
-    var _annee     = $('#ct-annee').val();
-    var _type      = $('#type-bilan').val();
-    var _value = 0;
-    if(_type == 'semestriel') _value = $('#id-semestre').val();
-    if(_type == 'trimestriel') _value = $('#id-trimestre').val();
-    if(_type == 'mensuel') _value = $('#id-mois').val();
+    var _loading    = "<i class='fa-li fa fa-spinner fa-spin'></i>";
+    var _id_centre  = $('#ct-centre').val();
+    var _annee      = $('#ct-annee').val();
+    var _type       = $('#type-bilan').val();
+    var _value      = 0;
+    if(_type == 'semestriel')   _value = $('#id-semestre').val();
+    if(_type == 'trimestriel')  _value = $('#id-trimestre').val();
+    if(_type == 'mensuel')      _value = $('#id-mois').val();
+    if(_type == 'hebdomadaire') _value = $('#id-week').val();
 
     $('#link-download').show();
     $('#link-download').html(_loading);
@@ -54,9 +65,9 @@ function ajaxGenerateStatistiqueVisite() {
         cache: false,
         data: {
             'id_centre' : _id_centre,
-            'annee' : _annee,
-            'type' : _type,
-            'value' : _value
+            'annee'     : _annee,
+            'type'      : _type,
+            'value'     : _value
         },
         success: function(data) {
             var _link_download = "<a href='" + data + "' title='Télécharger' " +
