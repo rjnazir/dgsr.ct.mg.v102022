@@ -1015,7 +1015,7 @@
                         </li>
                         {% endif %}
 
-                        {% if is_granted('ROLE_SUPERADMIN') or is_granted('ROLE_ADMIN') %}
+                        {% if is_granted('ROLE_SUPERADMIN') %}
                         {# Imprimé technique #}
                         <li class="treeview {% if menu_imprime_tech is defined %}{{ active }}{% endif %}">
                             <a href="#">

@@ -2104,7 +2104,7 @@ array_key_exists("menu_visite_extra_type", $context)) || array_key_exists("menu_
             echo "
                         ";
             // line 1018
-            if (($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_SUPERADMIN") || $this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_ADMIN"))) {
+            if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_SUPERADMIN")) {
                 // line 1019
                 echo "                        ";
                 // line 1020

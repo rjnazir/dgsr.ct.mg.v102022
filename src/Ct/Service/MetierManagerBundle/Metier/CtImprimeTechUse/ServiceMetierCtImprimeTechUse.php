@@ -2,19 +2,15 @@
 
 namespace Ct\Service\MetierManagerBundle\Metier\CtImprimeTechUse;
 
-use ArrayObject;
 use Doctrine\ORM\EntityManager;
 use Ct\Service\MetierManagerBundle\Utils\EntityName;
 use Symfony\Component\DependencyInjection\Container;
 use Ct\Service\MetierManagerBundle\Entity\CtImprimeTechUse;
+use DateTime;
 use Ct\Service\UserBundle\Entity\User;
 use Ct\Service\MetierManagerBundle\Utils\ServiceName;
 use Ct\Service\MetierManagerBundle\Utils\PathReportingName;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Types\ObjectType;
 use PhpOffice\PhpWord\PhpWord;
-use DateTime;
-use DateTimeImmutable;
 
 class ServiceMetierCtImprimeTechUse
 {
@@ -44,16 +40,6 @@ class ServiceMetierCtImprimeTechUse
     public function getRepository()
     {
         return $this->_entity_manager->getRepository(EntityName::CT_IMPRIME_TECH_USE);
-    }
-
-    /**
-     * Récuperer une IT par id
-     * @param Integer $_id
-     * @return array
-     */
-    public function getCtImprimeTechUseById($_id)
-    {
-        return $this->getRepository()->find($_id);
     }
 
     /**
@@ -87,40 +73,22 @@ class ServiceMetierCtImprimeTechUse
 
         // Récuperer ID utilisateur
         $_user_connected= $this->_container->get('security.token_storage')->getToken()->getUser();
-        /* $_ct_centre_id  = $_user_connected->getCtCentre(); */
+        $_ct_centre_id  = $_user_connected->getCtCentre();
         $_ct_centre_code = $_user_connected->getCtCentre()->getCtrCode();
-        
-        /* if($_ct_centre_id != 6){
-            $_sql    = "SELECT t FROM $_entity_bl t WHERE t.ctCentre IN (SELECT tt.id FROM $_entity_ctr tt WHERE tt.ctrCode = :ct_centre_code ) AND t.ituUsed = :itu_Used ORDER BY t.ituNumero ASC";
-            $_query  = $this->_entity_manager->createQuery($_sql);
-            $_query->setParameter('ct_centre_code', $_ct_centre_code);
-            $_query->setParameter('itu_Used', 0);
-            $_result = $_query->getResult();
-        }else{ */
-            $_result = new ArrayObject();
-            $_sq0 = "SELECT t FROM $_entity_it t";
-            $_qr0 = $this->_entity_manager->createQuery($_sq0);
-            $_re0 = $_qr0->getResult();
-            foreach($_re0 as $_tp0){
-                $_sq1 = "SELECT t
-                            FROM    $_entity_bl t
-                            WHERE   t.ctCentre IN (SELECT tt.id FROM $_entity_ctr tt WHERE tt.ctrCode = :ct_centre_code )
-                                    AND t.ituUsed = :itu_Used
-                                    AND t.ctImprimeTech = :ct_imprime_tech
-                                    AND t.ituUsed = :itu_Used
+
+        // $_sql   = "SELECT t FROM $_entity_bl t WHERE t.ctCentre = :ct_centre_id AND t.ituUsed = :itu_Used ORDER BY t.ituNumero ASC";
+        $_sql   = "SELECT t
+                    FROM $_entity_bl t 
+                    WHERE   t.ctCentre IN (SELECT tt.id FROM $_entity_ctr tt WHERE tt.ctrCode = :ct_centre_code )
+                            AND t.ituUsed = :itu_Used
                             ORDER BY t.ituNumero ASC";
-                $_query  = $this->_entity_manager->createQuery($_sq1);
-                $_query->setParameter('ct_centre_code', $_ct_centre_code);
-                $_query->setParameter('ct_imprime_tech', $_tp0->getId());
-                $_query->setParameter('itu_Used', 0);
-                // if(preg_match('/PV/', $_tp0->getNomImprimeTech())){
-                //     $_query->setMaxResults(500);
-                // }else{
-                //     $_query->setMaxResults(100);
-                // }
-                $_result = new ArrayObject(array_merge((array) $_result, (array) $_query->getResult()));
-            }
-        /* } */
+        $_query  = $this->_entity_manager->createQuery($_sql);
+        // $_query->setParameter('ct_centre_id', $_ct_centre_id);
+        $_query->setParameter('ct_centre_code', $_ct_centre_code);
+        $_query->setParameter('itu_Used', 0);
+        // $_query->setMaxResults(1000);
+        $_result = $_query->getResult();
+
         return $_result;
     }
 
@@ -156,6 +124,16 @@ class ServiceMetierCtImprimeTechUse
     }
 
     /**
+     * Récuperer une utilisation d'imprimé technique par identifiant
+     * @param Integer $_id
+     * @return array
+     */
+    public function getCtImprimeTechUseById($_id)
+    {
+        return $this->getRepository()->find($_id);
+    }
+
+    /**
      * Enregistrer une utilisation d'imprimé technique
      * @param Entity $_imprime_tech_use
      * @param string $_action
@@ -164,43 +142,58 @@ class ServiceMetierCtImprimeTechUse
      */
     public function saveCtImprimeTechUse($_imprime_tech_use, $_action, $_id)
     {
-        $_sce_centre = $this->_container->get(ServiceName::SRV_METIER_CENTRE);
-
-        /* Récuperer ID utilisateur connecté */
+        // Récuperer ID utilisateur
         $_user_connected = $this->_container->get('security.token_storage')->getToken()->getUser();
         $_imprime_tech_use->setCtUser($_user_connected);
-
-        // Récuperer ID centre de l'utilisateur connecté
+        // Récuperer ID centre de l'utilisateur en cours
         $_ct_centre_id = $_user_connected->getCtCentre();
-
-        // Récupérer ID centre dans l'enregistrement
         $ctCentre = $_imprime_tech_use->getCtCentre();
-        $_code_centre = $_imprime_tech_use->getCtCentre()->getCtrCode();
-
-        // Affectation nouvelle centre dans le où c'est son sous-centre
-        if(($_ct_centre_id !== $ctCentre) AND in_array($_ct_centre_id, $_sce_centre->getIdListCentresAndSubCentres($_code_centre)))
+        if ($_ct_centre_id !== $ctCentre)
             $_imprime_tech_use->setCtCentre($_ct_centre_id);
-            
-        // Affectation ID controle pour les rebuts
-        if(!empty($_imprime_tech_use->getItuMotifUsed()) && ($_imprime_tech_use->getItuMotifUsed() === "Rebut"))
+        // Affecter 1 au itu_used si itu_motif_used est different de vide
+        $ituMotifUsed = $_imprime_tech_use->getItuMotifUsed();
+        if(!empty($ituMotifUsed))
+            $_imprime_tech_use->setItuUsed(TRUE);
+        if(!empty($ituMotifUsed) && ($ituMotifUsed == "Rebut"))
             $_imprime_tech_use->setCtControle(NULL);
+        // Date de modification
+        $_imprime_tech_use->setItuUpdatedAt(new \DateTime());
 
-        if($_action === 'new'){
-            // Maj date de création et update
-            $_imprime_tech_use->setItuCreatedAt(new \DateTime());
-            $_imprime_tech_use->setItuUsed(TRUE);
-        }else if ($_action === 'update'){
-            $_imprime_tech_use->setItuUpdatedAt(new \DateTime());
-            $_imprime_tech_use->setItuUsed(TRUE);
-        }else if ($_action === 'reset'){
-            $_imprime_tech_use->setCtControle(NULL);
-            $_imprime_tech_use->setItuUsed(FALSE);
-            $_imprime_tech_use->setItuMotifUsed(NULL);
-            $_imprime_tech_use->setItuCreatedAt(NULL);
-            $_imprime_tech_use->setItuUpdatedAt(NULL);
+        if (is_null($_id)){
+            if ($_action == 'new') {
+                // Date de création
+                $_imprime_tech_use->setItuCreatedAt(new \DateTime());
+                // Date de modification
+                $_imprime_tech_use->setItuUpdatedAt(NULL);
+                $this->_entity_manager->persist($_imprime_tech_use);
+            } else if ($_action == 'reset') {
+                $_imprime_tech_use->setCtControle(NULL);
+                $_imprime_tech_use->setItuUsed(0);
+                $_imprime_tech_use->setItuMotifUsed(NULL);
+                $_imprime_tech_use->setItuCreatedAt(NULL);
+                $_imprime_tech_use->setItuUpdatedAt(NULL);
+                $this->_entity_manager->persist($_imprime_tech_use);
+            }
+        }else{
+            if($_action == 'Visite' || $_action == 'Contre' || $_action == 'Réception' || $_action == 'Constatation')
+            {
+                if ($_action == 'new') {
+                    $_imprime_tech_use->setCtControle($_id);
+                    $_imprime_tech_use->setItuUsed(TRUE);
+                    $_imprime_tech_use->setItuMotifUsed($_action);
+                    $_imprime_tech_use->setItuCreatedAt(new DateTime());
+                    $_imprime_tech_use->setItuUpdatedAt(NULL);
+                    $this->_entity_manager->persist($_imprime_tech_use);
+                }else if ($_action == 'update') {
+                    $_imprime_tech_use->setCtControle($_id);
+                    $_imprime_tech_use->setItuUsed(TRUE);
+                    $_imprime_tech_use->setItuMotifUsed($_action);
+                    // $_imprime_tech_use->setItuCreatedAt(new DateTime());
+                    $_imprime_tech_use->setItuUpdatedAt(new DateTime());
+                    $this->_entity_manager->persist($_imprime_tech_use);
+                }
+            }
         }
-
-        $this->_entity_manager->persist($_imprime_tech_use);
         $this->_entity_manager->flush();
 
         return true;
@@ -313,12 +306,13 @@ class ServiceMetierCtImprimeTechUse
         $_user_connected= $this->_container->get('security.token_storage')->getToken()->getUser();
         $_ct_centre_id  = $_user_connected->getCtCentre();
         $_ct_centre_code  = $_user_connected->getCtCentre()->getCtrCode();
+
         // $_sql = "SELECT t FROM $_entity_itu t WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprime_tech_id AND t.ituNumero LIKE :itu_numero";
-        $_sql   = " SELECT t
-                    FROM $_entity_itu t 
-                    WHERE t.ctCentre IN (SELECT tt.id FROM $_entity_ctr tt WHERE tt.ctrCode = :ct_centre_code )
-                        AND t.ctImprimeTech = :ct_imprime_tech_id
-                        AND t.ituNumero LIKE :itu_numero";
+        $_sql   = " SELECT  t
+                    FROM    $_entity_itu t 
+                    WHERE       t.ctCentre      IN      (SELECT tt.id FROM $_entity_ctr tt WHERE tt.ctrCode = :ct_centre_code )
+                            AND t.ctImprimeTech =       :ct_imprime_tech_id
+                            AND t.ituNumero     LIKE    :itu_numero";
         $_query  = $this->_entity_manager->createQuery($_sql);
         $_query->setParameter('ct_centre_code', $_ct_centre_code);
         // $_query->setParameter('ct_centre_id', $_ct_centre_id);
@@ -332,6 +326,7 @@ class ServiceMetierCtImprimeTechUse
 
     /**
      *  Récuperer le numéro d'une imprimé technique utilisé spécifié
+     *  @param $_ct_centre_id : integer
      *  @param $_ct_controle_id : integer
      *  @param $_type_it : string
      *  @return $_num_it : string
@@ -360,6 +355,31 @@ class ServiceMetierCtImprimeTechUse
     }
 
     /**
+     *  Récuperer le numéro d'une imprimé technique utilisé spécifié
+     *  @param $_ct_controle_id : integer
+     *  @param $_type_it : string
+     *  @return $_num_it : string
+     */
+    /* public function getNumITByControleAndTypeIT($_ct_controle_id, $_type_it){
+        $_entity_it = EntityName::CT_IMPRIME_TECH;
+        $_entity_itu= EntityName::CT_IMPRIME_TECH_USE;
+        $_num_it = '-';
+        $_dql = " SELECT  itu
+                        FROM    $_entity_itu itu
+                                INNER JOIN $_entity_it it WITH itu.ctImprimeTech = it.id
+                        WHERE       itu.ctControle = :ct_controle_id
+                                AND it.nomImprimeTech = :type_it";
+        $_query = $this->_entity_manager->createQuery($_dql);
+        $_query->setParameter('ct_controle_id', $_ct_controle_id);
+        $_query->setParameter('type_it', $_type_it);
+        $_res = $_query->getResult();
+        foreach($_res as $_res){
+            !empty($_res->getItuNumero()) ? $_num_it = $_res->getItuNumero() : $_num_it = '-';
+        }
+        return $_num_it;
+    }*/
+
+    /**
      *  Récuperer tous les imprimés techniques utilisés par un centre dans une journée
      *  @param  $_centre : ID du centre exploitation
      *  @param  $_date : date d'exploitation
@@ -376,7 +396,7 @@ class ServiceMetierCtImprimeTechUse
 	    $_dql = " SELECT    itu
                         FROM    $_entity_itu itu
                                 INNER JOIN $_entity_it it WITH itu.ctImprimeTech = it.id
-                        WHERE   ((itu.ituMotifUsed = :ct_itu_motif_used0 OR itu.ituMotifUsed = :ct_itu_motif_used1)
+                        WHERE   ((itu.ituMotifUsed = :ct_itu_motif_used0 OR itu.ituMotifUsed = :ct_itu_motif_used1 OR itu.ituMotifUsed LIKE :ct_itu_motif_used2)
                                 AND itu.ctCentre = :ct_centre_id
                                 AND itu.createdAt LIKE :created_at) 
                                 OR (itu.ctCentre = :ct_centre_id
@@ -388,6 +408,7 @@ class ServiceMetierCtImprimeTechUse
         $_query->setParameter('type_it', '%PV%');
         $_query->setParameter('ct_itu_motif_used0', 'Spéciale');
         $_query->setParameter('ct_itu_motif_used1', 'Rebut');
+        $_query->setParameter('ct_itu_motif_used2', 'Duplicata%');
         $_query->setParameter('created_at', $_date.'%');
         $_res = $_query->getResult();
         $_result = [];
@@ -481,11 +502,11 @@ class ServiceMetierCtImprimeTechUse
                     $_result[$_j]->ncrt     = (($_print == 'Carnet d\'entretien') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';
                     $_result[$_j]->ncbl     = (($_print == 'Carte blanche') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';
                     $_result[$_j]->nbbr     = (($_print == 'CIM 32 Bis') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';
-                    $_result[$_j]->ncjn     = (($_print == 'Carte jaune') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte jaune', $_date), array_column($_result, 'ncjn')) ? $this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte jaune', $_date) : '-';
-                    $_result[$_j]->njbr     = (($_print == 'Carte jaune barrée rouge') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte jaune barrée rouge', $_date), array_column($_result, 'njbr')) ? $this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte jaune barrée rouge', $_date) : '-';
-                    $_result[$_j]->ncrg     = (($_print == 'Carte rouge') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte rouge', $_date), array_column($_result, 'ncrg')) ? $this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte rouge', $_date) : '-';
-                    $_result[$_j]->ncae     = (($_print == 'Carte auto-école') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte auto-école', $_date), array_column($_result, 'ncae')) ? $this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Carte auto-école', $_date) : '-';
-                    $_result[$_j]->plch     = !in_array($this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Plaque chassis', $_date), array_column($_result, 'plch')) ? $this->getNumITByControleAndTypeIT($_re->getCtControle(), 'Plaque chassis', $_date) : '-';
+                    $_result[$_j]->ncjn     = (($_print == 'Carte jaune') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune', $_date), array_column($_result, 'ncjn')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune', $_date) : '-';
+                    $_result[$_j]->njbr     = (($_print == 'Carte jaune barrée rouge') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune barrée rouge', $_date), array_column($_result, 'njbr')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune barrée rouge', $_date) : '-';
+                    $_result[$_j]->ncrg     = (($_print == 'Carte rouge') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte rouge', $_date), array_column($_result, 'ncrg')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte rouge', $_date) : '-';
+                    $_result[$_j]->ncae     = (($_print == 'Carte auto-école') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';!in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte auto-école', $_date), array_column($_result, 'ncae')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte auto-école', $_date) : '-';
+                    $_result[$_j]->plch     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Plaque chassis', $_date), array_column($_result, 'plch')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Plaque chassis', $_date) : '-';
                     $_result[$_j]->ncim31   = (($_print == 'CIM 31') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';
                     $_result[$_j]->ncim31b  = (($_print == 'CIM 31 Bis') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';
                     $_result[$_j]->ncim32   = (($_print == 'CIM 32') AND ($_re->getItuNumero())) ? $_re->getItuNumero() : '-';
@@ -662,20 +683,20 @@ class ServiceMetierCtImprimeTechUse
                     $_result[$_j]->ref = $_re->getCtControle();
                     $_result[$_j]->imm = '-';
                     $_result[$_j]->used     = $_used;
-                    $_result[$_j]->ncrt     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carnet d\'entretien', $_date), array_column($_result, 'ncrt')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carnet d\'entretien', $_date) : '-';
-                    $_result[$_j]->ncbl     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte blanche', $_date), array_column($_result, 'ncbl')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte blanche', $_date) : '-';
-                    $_result[$_j]->nbbr     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32 Bis', $_date), array_column($_result, 'nbbr')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32 Bis', $_date) : '-';
-                    $_result[$_j]->ncjn     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune', $_date), array_column($_result, 'ncjn')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune', $_date) : '-';
+                    $_result[$_j]->ncrt     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carnet d\'entretien', $_date), array_column($_result, 'ncrt')) ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carnet d\'entretien', $_date) : '-';
+                    $_result[$_j]->ncbl     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte blanche', $_date), array_column($_result, 'ncbl'))       ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte blanche', $_date) : '-';
+                    $_result[$_j]->nbbr     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32 Bis', $_date), array_column($_result, 'nbbr'))          ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32 Bis', $_date) : '-';
+                    $_result[$_j]->ncjn     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune', $_date), array_column($_result, 'ncjn'))         ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune', $_date) : '-';
                     $_result[$_j]->njbr     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune barrée rouge', $_date), array_column($_result, 'njbr')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte jaune barrée rouge', $_date) : '-';
-                    $_result[$_j]->ncrg     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte rouge', $_date), array_column($_result, 'ncrg')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte rouge', $_date) : '-';
-                    $_result[$_j]->ncae     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte auto-école', $_date), array_column($_result, 'ncae')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte auto-école', $_date) : '-';
-                    $_result[$_j]->plch     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Plaque chassis', $_date), array_column($_result, 'plch')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Plaque chassis', $_date) : '-';
-                    $_result[$_j]->ncim31   = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31', $_date), array_column($_result, 'ncim31')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31', $_date) : '-';
-                    $_result[$_j]->ncim31b  = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31 Bis', $_date), array_column($_result, 'ncim31b')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31 Bis', $_date) : '-';
-                    $_result[$_j]->ncim32   = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32', $_date), array_column($_result, 'ncim32')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32', $_date) : '-';
-                    $_result[$_j]->npvo     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVO', $_date), array_column($_result, 'npvo')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVO', $_date) : '-';
-                    $_result[$_j]->npvm     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVM', $_date), array_column($_result, 'npvm')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVM', $_date) : '-';
-                    $_result[$_j]->npcm     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVMC', $_date), array_column($_result, 'npcm')) ? $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVMC', $_date) : '-';
+                    $_result[$_j]->ncrg     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte rouge', $_date), array_column($_result, 'ncrg'))         ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte rouge', $_date) : '-';
+                    $_result[$_j]->ncae     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte auto-école', $_date), array_column($_result, 'ncae'))    ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Carte auto-école', $_date) : '-';
+                    $_result[$_j]->plch     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Plaque chassis', $_date), array_column($_result, 'plch'))      ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'Plaque chassis', $_date) : '-';
+                    $_result[$_j]->ncim31   = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31', $_date), array_column($_result, 'ncim31'))            ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31', $_date) : '-';
+                    $_result[$_j]->ncim31b  = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31 Bis', $_date), array_column($_result, 'ncim31b'))       ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 31 Bis', $_date) : '-';
+                    $_result[$_j]->ncim32   = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32', $_date), array_column($_result, 'ncim32'))            ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'CIM 32', $_date) : '-';
+                    $_result[$_j]->npvo     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVO', $_date), array_column($_result, 'npvo'))                 ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVO', $_date) : '-';
+                    $_result[$_j]->npvm     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVM', $_date), array_column($_result, 'npvm'))                 ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVM', $_date) : '-';
+                    $_result[$_j]->npcm     = !in_array($this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVMC', $_date), array_column($_result, 'npcm'))                ?   $this->getNumITByControleAndTypeIT($_centre, $_re->getCtControle(), 'PVMC', $_date) : '-';
                     $_result[$_j]->adm      = '-';
                     $_result[$_j]->obs      = '-';
                     break;
@@ -915,7 +936,7 @@ class ServiceMetierCtImprimeTechUse
 
         return array(
             'download_path' => $_dest_tmp,
-            /* 'url_path'      => $_path_docx */
+            // 'url_path'      => $_path_docx
             'url_path'      => $_path_pdf
         );
     }
@@ -955,30 +976,27 @@ class ServiceMetierCtImprimeTechUse
                 case 'BEFORE' : 
                     if(is_null($_used)){
                         $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
-                                WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.activedAt < :actived_at
-                                OR t.createdAt LIKE :create_now";
+                                WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.createdAt < :ct_create_at";
                         $_query = $this->_entity_manager->createQuery($_dql);
                         $_query->setParameter('ct_centre_id', $_centre);
                         $_query->setParameter('ct_imprimetech_id', $_typeit);
-                        $_query->setParameter('actived_at', $_dateuse);
-                        $_query->setParameter('create_now', date('Y-m-d').'%');
+                        $_query->setParameter('ct_create_at', $_dateuse);
                     }else{
                         $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
                                 WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.ituUsed = :ct_used_it
-                                AND t.activedAt < :actived_at OR t.createdAt LIKE :create_now";
+                                AND t.createdAt < :ct_create_at";
                         $_query = $this->_entity_manager->createQuery($_dql);
                         $_query->setParameter('ct_centre_id', $_centre);
                         $_query->setParameter('ct_imprimetech_id', $_typeit);
                         $_query->setParameter('ct_used_it', $_used);
-                        $_query->setParameter('actived_at', $_dateuse);
-                        $_query->setParameter('create_now', date('Y-m-d').'%');
+                        $_query->setParameter('ct_create_at', $_dateuse);
                     }
                     break;
                 case 'IN' :
                     if(is_null($_used)){
                         $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
-                                WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.activedAt >= :date_debut
-                                AND t.activedAt <= :date_fin";
+                                WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.createdAt >= :date_debut
+                                AND t.createdAt <= :date_fin";
                         $_query = $this->_entity_manager->createQuery($_dql);
                         $_query->setParameter('ct_centre_id', $_centre);
                         $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -987,7 +1005,7 @@ class ServiceMetierCtImprimeTechUse
                     }else{
                         $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
                                 WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.ituUsed = :ct_used_it
-                                AND t.activedAt >= :date_debut AND t.activedAt <= :date_fin";
+                                AND t.createdAt >= :date_debut AND t.createdAt <= :date_fin";
                         $_query = $this->_entity_manager->createQuery($_dql);
                         $_query->setParameter('ct_centre_id', $_centre);
                         $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -1000,8 +1018,8 @@ class ServiceMetierCtImprimeTechUse
                     if(is_null($_used)){
                         if($_dateuse !== date('Y-m-d')){
                             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
-                                    WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.createdAt >= :date_debut
-                                    AND t.createdAt <= :date_fin";
+                                    WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.updatedAt >= :date_debut
+                                    AND t.updatedAt <= :date_fin";
                             $_query = $this->_entity_manager->createQuery($_dql);
                             $_query->setParameter('ct_centre_id', $_centre);
                             $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -1009,7 +1027,7 @@ class ServiceMetierCtImprimeTechUse
                             $_query->setParameter('date_fin', $_datefin);
                         }else{
                             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
-                                    WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.createdAt LIKE :date_debut";
+                                    WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.updatedAt LIKE :date_debut";
                             $_query = $this->_entity_manager->createQuery($_dql);
                             $_query->setParameter('ct_centre_id', $_centre);
                             $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -1019,7 +1037,7 @@ class ServiceMetierCtImprimeTechUse
                         if($_dateuse !== date('Y-m-d')){
                             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
                                     WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.ituUsed = :ct_used_it
-                                    AND t.createdAt >= :date_debut AND t.createdAt <= :date_fin";
+                                    AND t.updatedAt >= :date_debut AND t.updatedAt <= :date_fin";
                             $_query = $this->_entity_manager->createQuery($_dql);
                             $_query->setParameter('ct_centre_id', $_centre);
                             $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -1029,7 +1047,7 @@ class ServiceMetierCtImprimeTechUse
                         }else{
                             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
                                     WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.ituUsed = :ct_used_it
-                                    AND t.createdAt LIKE :date_debut";
+                                    AND t.updatedAt LIKE :date_debut";
                             $_query = $this->_entity_manager->createQuery($_dql);
                             $_query->setParameter('ct_centre_id', $_centre);
                             $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -1042,7 +1060,7 @@ class ServiceMetierCtImprimeTechUse
                     if(is_null($_used)){
                         $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
                                 WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id
-                                AND t.activedAt >= :date_debut AND t.activedAt <= :date_fin";
+                                AND t.createdAt >= :date_debut AND t.createdAt <= :date_fin";
                         $_query = $this->_entity_manager->createQuery($_dql);
                         $_query->setParameter('ct_centre_id', $_centre);
                         $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -1051,7 +1069,7 @@ class ServiceMetierCtImprimeTechUse
                     }else{
                         $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id
                                 WHERE t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND t.ituUsed = :ct_used_it
-                                AND t.activedAt >= :date_debut AND t.activedAt <= :date_fin";
+                                AND t.createdAt >= :date_debut AND t.createdAt <= :date_fin";
                         $_query = $this->_entity_manager->createQuery($_dql);
                         $_query->setParameter('ct_centre_id', $_centre);
                         $_query->setParameter('ct_imprimetech_id', $_typeit);
@@ -1097,13 +1115,13 @@ class ServiceMetierCtImprimeTechUse
 
     /**
      *  Récupération des stock des imprimés techniques existant
-     *  @param $_centre     : ID centre detenteur
-     *  @param $_type_it    : Type d'imprimé technique à compter
-     *  @param $_annee      : Année de consommation des imprimés techniques
-     *  @param $_value      : Mois ou trimestre ou semestre de consommation des imprimés techniques
-     *  @param $_interval   : Intervalle de consommation des imprimés techniques
-     *  @param $_motif      : Motif d'utilisation de l'imprimée technique
-     *  @return $_result    : Nombre des imprimés techniques consommées
+     *  @param $_centre : ID centre detenteur
+     *  @param $_type_it : Type d'imprimé technique à compter
+     *  @param $_annee : Année de consommation des imprimés techniques
+     *  @param $_value : Mois ou trimestre ou semestre de consommation des imprimés techniques
+     *  @param $_interval : Intervalle de consommation des imprimés techniques
+     *  @param $_motif : Motif d'utilisation de l'imprimée technique
+     *  @return $_result : Nombre des imprimés techniques consommées
      */
     public function getConsommationByImprimeTech($_centre, $_type_it, $_annee, $_value, $_interval, $_motif)
     {
@@ -1116,7 +1134,7 @@ class ServiceMetierCtImprimeTechUse
         if ($_interval == "mensuel") {
             $_mois = $_value;
             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id WHERE t.ituUsed = :used AND
-            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.createdAt) = :annee AND MONTH(t.createdAt) = :mois".$_motif_use."";
+            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.updatedAt) = :annee AND MONTH(t.updatedAt) = :mois".$_motif_use."";
         } elseif ($_interval == "trimestriel") {
             if($_value == 1){
                 $_mois = '1, 2, 3';
@@ -1128,7 +1146,7 @@ class ServiceMetierCtImprimeTechUse
                 $_mois = '10, 11, 12';
             }
             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id WHERE t.ituUsed = :used AND
-            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.createdAt) = :annee AND MONTH(t.createdAt) IN (:mois)".$_motif_use."";
+            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.updatedAt) = :annee AND MONTH(t.updatedAt) IN (:mois)".$_motif_use."";
         } elseif ($_interval == "semestriel") {
             if($_value == 1){
                 $_mois = '1, 2, 3, 4, 5, 6';
@@ -1136,11 +1154,11 @@ class ServiceMetierCtImprimeTechUse
                 $_mois = '7, 8, 9, 10, 11, 12';
             }
             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id WHERE t.ituUsed = :used AND
-            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.createdAt) = :annee AND MONTH(t.createdAt) IN (:mois)".$_motif_use."";
+            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.updatedAt) = :annee AND MONTH(t.updatedAt) IN (:mois)".$_motif_use."";
         }else{
             $_mois = null;
             $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_it tt WITH t.ctImprimeTech = tt.id WHERE t.ituUsed = :used AND
-            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.createdAt) = :annee".$_motif_use."";
+            t.ctCentre = :ct_centre_id AND t.ctImprimeTech = :ct_imprimetech_id AND YEAR(t.updatedAt) = :annee".$_motif_use."";
         }
         $_query = $this->_entity_manager->createQuery($_dql);
         $_query->setParameter('used', 1);
@@ -1153,62 +1171,6 @@ class ServiceMetierCtImprimeTechUse
         $_result = count($_res);
 
         return $_result;
-    }
-
-    /**
-     * Fonction récupérant le nombre d'IT par type non activé pour un centre
-     * @param $_ct_imprime_tech_id : ID du type d'IT à traiter
-     * @param $_ct_centre_id : ID du centre à traiter
-     * @return $_nombre : Nombre d'IT pour un type non activé pour un centre
-     */
-    public function getCompteITNotActivedForOneCentre($_ct_centre_id, $_ct_imprime_tech_id){
-        $_nombre = 0;
-        $_entity_itu = EntityName::CT_IMPRIME_TECH_USE;
-        $_entity_be = EntityName::CT_BORDEREAU;
-        // 1ère version
-        $_dql = "SELECT b   FROM $_entity_be b
-                            WHERE   b.ctCentre = :ct_centre_id
-                                    AND b.ctImprimeTech = :ct_imprime_tech_id
-                                    AND NOT b.id IN (SELECT DISTINCT u.ct_bordereau_id FROM $_entity_be u WHERE u.ctCentre = :ct_centre_id AND u.ctImprimeTech = :ct_imprime_tech_id)";
-        $_query = $this->_entity_manager->createQuery($_dql);
-        $_query->setParameter('ct_centre_id', $_ct_centre_id);
-        $_query->setParameter('ct_imprime_tech_id', $_ct_imprime_tech_id);
-        $_result= $_query->getResult();
-        foreach($_result as $_r){
-            $_debut = $_r->getBlDebutNumero();
-            $_final = $_r->getBlFinNumero();
-        }
-        $_nombre = abs($_debut - $_final) + 1;
-        // 2ème version
-        /* $_dql0 = "SELECT DISTINCT u FROM $_entity_itu u WHERE u.ctCentre = :ct_centre_id AND u.ctImprimeTech = :ct_imprime_tech_id";
-        $_query0 = $this->_entity_manager->createQuery($_dql0);
-        $_query0->setParameter('ct_centre_id', $_ct_centre_id);
-        $_query0->setParameter('ct_imprime_tech_id', $_ct_imprime_tech_id);
-        $_result0 = $_query0->getResult();
-        foreach($_result0 as $_r){
-            $_ct_bordereau_id = $_r->getCtBordereau();
-            $_dql = "SELECT b FROM $_entity_be b WHERE b.id = :ct_bordereau_id AND b.ctCentre = :ct_centre_id AND b.ctImprimeTech = :ct_imprime_tech_id";
-            $_query = $this->_entity_manager->createQuery($_dql);
-            $_query->setParameter('ct_bordereau_id', $_ct_bordereau_id);
-            $_query->setParameter('ct_centre_id', $_ct_centre_id);
-            $_query->setParameter('ct_imprime_tech_id', $_ct_imprime_tech_id);
-            $_result = $_query->getResult();
-            if(count($_result) > 0){
-                foreach($_result as $_rr){
-                    $_debut = $_rr->getBlDebutNumero();
-                    $_final = $_rr->getBlFinNumero();
-                }
-                $_nombre = abs($_debut - $_final) + 1;
-            }
-        } */
-        // 3ème version
-        /* $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-        $query = "SELECT `bl_debut_numero`, `bl_fin_numero` FROM `ct_bordereau` WHERE `ct_centre_id` = 4 AND `ct_imprime_tech_id` = 1 AND `id` NOT IN (SELECT DISTINCT ct_bordereau_id FROM ct_imprime_tech_use WHERE ct_centre_id = 4 AND ct_imprime_tech_id = 1)";
-        $result = $result = $em->createQuery($query)->execute();
-        foreach ($result as $_r) {
-            $_nombre += abs($_r['bl_debut_numero'] - $_r['bl_fin_numero']) + 1;
-        } */
-        return $_nombre;
     }
 
     /**
@@ -1234,14 +1196,14 @@ class ServiceMetierCtImprimeTechUse
             $_initial = $this->getCompteITwithCondition($_centre, $_dateuse, 0, $_typeit, 'BEFORE');
             $_entree = $this->getCompteITwithCondition($_centre, $_dateuse, 0, $_typeit, 'IN');
             $_sortie = $this->getCompteITwithCondition($_centre, $_dateuse, 1, $_typeit, 'OUT');
-            $_stock = $this->getCompteITwithCondition($_centre, $_dateuse, 0, $_typeit, NULL);
-            /* $_non_actived = $this->getCompteITNotActivedForOneCentre($_centre, $_typeit); */
-            $result[$j]->initial = $_initial /* + $_non_actived */;
-            $result[$j]->input = $_entree;
-            $result[$j]->output = $_sortie;
-            $result[$j]->instock = $_stock /* + $_non_actived */;
-            $result[$j]->ndebut = $this->getMinOrMaxNumImprimeTech($_centre, 0, $_typeit, 'ASC');
-            $result[$j]->nfin = $this->getMinOrMaxNumImprimeTech($_centre, 0, $_typeit, 'DESC');
+            // $_stock    = $this->getCompteITwithCondition($_centre, $_dateuse, 0, $_typeit, NULL);
+            $_stock = ($_initial + $_entree) - $_sortie;
+            $result[$j]->initial    = $_initial;
+            $result[$j]->input      = $_entree;
+            $result[$j]->output     = $_sortie;
+            $result[$j]->instock    = $_stock;
+            $result[$j]->ndebut     = $this->getMinOrMaxNumImprimeTech($_centre, 0, $_typeit, 'ASC');
+            $result[$j]->nfin       = $this->getMinOrMaxNumImprimeTech($_centre, 0, $_typeit, 'DESC');
             $j++;
         }
 
@@ -1260,10 +1222,10 @@ class ServiceMetierCtImprimeTechUse
         $_entity_manager_ctr = $this->_container->get(ServiceName::SRV_METIER_CENTRE);
         $_centre = $_entity_manager_ctr->getCtCentreById($_centre);
         $_ct_crtcode = $_centre->getCtrCode();
-        /* $_dql = "SELECT t FROM $_entity_itu t WHERE t.ctCentre = :ct_centre_id"; */
+        // $_dql = "SELECT t FROM $_entity_itu t WHERE t.ctCentre = :ct_centre_id";
         $_dql = "SELECT t FROM $_entity_itu t INNER JOIN $_entity_ctr tt WITH t.ctCentre = tt.id WHERE tt.ctrCode = :ct_ctr_code";
         $_query = $this->_entity_manager->createQuery($_dql);
-        /* $_query->setParameter('ct_centre_id', $_centre); */
+        // $_query->setParameter('ct_centre_id', $_centre);
         $_query->setParameter('ct_ctr_code', $_ct_crtcode);
         $_res = $_query->getResult();
         count($_res) != 0 ? $_exist = true : $_exist = false;
@@ -1305,7 +1267,7 @@ class ServiceMetierCtImprimeTechUse
         $_date_filename     = str_replace('/', '', $_date);
         $_path              = $_fuit_directory . PathReportingName::GENERATE_FEUILLE_STOCK_IT;
 
-        $_fichier           = 'FEUILLE_STOCK_IT_'.$_code_centre.'_'.$_code_province . '_' . date('Yndhms');
+        $_fichier           = 'FEUILLE_STOCK_IT_'.$_code_centre.'_'.$_code_province.'_'. $_date_filename;
         $_filename          = strtoupper($_fichier);
 
         $_dest_tmp          = $_path . $_filename . '.docx';
@@ -1329,20 +1291,20 @@ class ServiceMetierCtImprimeTechUse
             case (preg_match('/alarobia/i', $_lieu_centre) ? true : false) :
                 $_template->setValue('lieu', '');break;
             case (preg_match('/alasora/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', 'ALASORA'. "\r\n" . '-----------------------');break;
+                $_template->setValue('lieu', 'ALASORA<w:br/>-----------------------');break;
             case (preg_match('/VISITE A DOMICILE/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', 'ALAROBIA'. "\r\n" . '-----------------------');break;
+                $_template->setValue('lieu', 'ALAROBIA<w:br/>-----------------------');break;
             case (preg_match('/itinerante/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', str_replace('ITINERANTE ', '', $_lieu_centre). "\r\n" . '-----------------------');break;
+                $_template->setValue('lieu', str_replace('ITINERANTE ', '', $_lieu_centre)).'<w:br/>-----------------------';break;
             default :
-                $_template->setValue('lieu', $_lieu_centre. "\r\n" . '-----------------------');break;
+                $_template->setValue('lieu', $_lieu_centre.'<w:br/>-----------------------');break;
         }
 
         $_template->setValue('debut', $_date);
         $_template->setValue('fin', $_fin);
 
         ($_date === $_fin) ? $_periode = "DU ".$_date : $_periode = "DU ".$_date." AU ".$_fin;
-        $_titre = "ETAT DES STOCKS DES IMPRIMES TECHNIQUE". "\r\n" .$_periode;
+        $_titre = "ETAT DES STOCKS DES IMPRIMES TECHNIQUE<w:br/>".$_periode;
         $_template->setValue('titre', $_titre);
 
         if(preg_match('/ALASORA/', $_lieu_centre)){
@@ -1386,7 +1348,7 @@ class ServiceMetierCtImprimeTechUse
 
         return array(
             'download_path' => $_dest_tmp,
-            /* 'url_path'      => $_path_docx */
+            // 'url_path'      => $_path_docx
             'url_path'      => $_path_pdf
         );
     }
@@ -1401,10 +1363,12 @@ class ServiceMetierCtImprimeTechUse
      */
     public function generateReportingByInterval($_id_centre, $_annee, $_value, $_interval)
     {
-        /* Récupérer manager */
+        // Récupérer manager
         $_centre_manager = $this->_container->get(ServiceName::SRV_METIER_CENTRE);
 
-        /* Récupération informations Centre et province */
+
+        // Récupération informations
+        // Centre et province
         $_centre = $_centre_manager->getCtCentreById($_id_centre);
         $_nom_centre = $_centre->getCtrNom();
         $_code_centre = $_centre->getCtrCode();
@@ -1482,7 +1446,7 @@ class ServiceMetierCtImprimeTechUse
             $_template->setValue('interval', '');
         }
 
-        $_motifs = array('Authenticité', 'Autres', 'Caractéristique', 'Constatation', 'Contre', 'Duplicata', 'Duplicata visite', 'Duplicata réception', 'Mutation', 'Rebut', 'Réception', 'Visite', 'Spéciale');
+        $_motifs = array('Authenticité', 'Autres', 'Caractéristique', 'Constatation', 'Contre', 'Duplicata', 'Mutation', 'Rébus', 'Réception', 'Visite', 'Spécial');
         $i = 0;
         $nbmotifs = count($_motifs);
         $_template->cloneRow('motif', $nbmotifs);
@@ -1560,8 +1524,8 @@ class ServiceMetierCtImprimeTechUse
 
         return array(
             'download_path' => $_dest_tmp,
-            /* 'url_path' => $_path_docx */
             'url_path' => $_path_pdf
+            // 'url_path' => $_path_docx
         );
     }
 
@@ -1582,29 +1546,6 @@ class ServiceMetierCtImprimeTechUse
         $_query  = $this->_entity_manager->createQuery($_sql);
         $_query->setParameter('ct_imprimetech_id', $_type_it);
         $_query->setParameter('itu_numero', $_num_it);
-        $_ret = $_query->getResult();
-        $_nombre = count($_ret);
-        if($_nombre != 0) $_trouve = true;
-        return $_trouve;
-    }
-
-    /**
-     *  Fonction permettant de tester un numéro d'imprimée technique s'il existe déjà ou non
-     *  @param $_imprime_tech_id : ID imprimée technique à tester
-     *  @param $_ct_controle_id : ID controle technique à tester
-     *  @return $_trouve (boolean)
-     */
-    public function getITUByITAndControleId($_imprime_tech_id, $_ct_controle_id)
-    {
-        $_entity_itu = EntityName::CT_IMPRIME_TECH_USE;
-        $_trouve = false;
-        $_sql    = "SELECT u
-                    FROM    $_entity_itu u 
-                    WHERE   u.ctImprimeTech = :ct_imprimetech_id
-                            AND u.ctControle != :ct_controle_id";
-        $_query  = $this->_entity_manager->createQuery($_sql);
-        $_query->setParameter('ct_imprimetech_id', $_imprime_tech_id);
-        $_query->setParameter('ct_controle_id', $_ct_controle_id);
         $_ret = $_query->getResult();
         $_nombre = count($_ret);
         if($_nombre != 0) $_trouve = true;
@@ -1639,20 +1580,6 @@ class ServiceMetierCtImprimeTechUse
         return $exist;
     }
 
-    /**
-     *  Fonction permet de tester si le numéro d'IT est déja dans la liste des IT utilisé
-     *  @param $_itu_numero : Numero de l'IT à tester
-     *  @param $_array      : Tableau des munéros d'IT utilisés
-     *  @return $_trouve    : Booléen VRAI si le numéro est trouvé, FAUX dans le cas contraire
-     */
-    public function findNumeroImprimeTechUsedInArray($_itu_numero, $_array){
-        $_trouve = false;
-        $cle_array = array_keys($_array);
-        foreach($cle_array as $_column){
-            if(in_array($_itu_numero, array_column($_array, $_column))) $_trouve = true; break;
-        }
-        return $_trouve;
-    }
 
     /**
      * Fonction permettant de savoir si un IT est déja utilisé ou non
@@ -1696,584 +1623,6 @@ class ServiceMetierCtImprimeTechUse
         return $_is_your_controle;
     }
 
-
-    /**
-     * Générer feuille d'utilisation des IT
-     *  @param  $_centre : ID du centre exploitant
-     *  @param  $_date : Date d'exploitation
-     *  @return array  array()
-     */    
-    public function genererNewFeuilleCaisse($_centre, $_date){
-        $_list_mois = array(1 => "janvier", 2 => "février", 3 => "mars", 4 => "avril", 5 => "mai", 6 => "juin", 7 => "juillet", 8 => "août", 9 => "septembre", 10 => "octobre", 11 => "novembre", 12 => "décembre");
-
-        // Récupérer manager
-        $_srv_centre = $this->_container->get(ServiceName::SRV_METIER_CENTRE);
-        $_srv_bordereau = $this->_container->get(ServiceName::SRV_METIER_BORDEREAU);
-
-        if($_centre == 0) {
-            $_ct_user_id= $this->_container->get('security.token_storage')->getToken()->getUser();
-            $_centre    = $_ct_user_id->getCtCentre();
-        }else{
-            $_centre = $_srv_centre->getCtCentreById($_centre);
-        }
-        /* Récupération informations chef de centre et lieu centre */
-        $_nom_centre    = $_centre->getCtrNom();
-        $_code_centre   = $_centre->getCtrCode();
-        $_code_province = $_centre->getCtProvince()->getPrvCode();
-
-        $_centre_formatted = $_srv_bordereau->transformcenter($_nom_centre);
-        $_lieu_centre   = $_centre_formatted[1];
-        $_nom_centre    = $_centre_formatted[2];
-
-        // Récupérer répertoire modèle Word
-        $_fuit_directory= $this->_container->getParameter('reporting_template_directory');
-        $_template_src  = $_fuit_directory . PathReportingName::TEMPLATE_NOUVELLE_FEUILLE_CAISSE;
-        $_date_filename = str_replace('/', '', $_date);
-        $_path          = $_fuit_directory . PathReportingName::GENERATE_NOUVELLE_FEUILLE_CAISSE;
-
-        $_fichier       = 'NOUVELLE_FEUILLE_CAISSE_'.$_code_province.'_'.$_code_centre.'_'. date('Yndhms');
-        $_filename      = strtoupper($_fichier);
-
-        $_dest_tmp      = $_path . $_filename . '.docx';
-        $_file_without_ext  = $_filename;
-
-        $_url_scheme    = $this->_container->get('request_stack')->getCurrentRequest()->server->get('HTTP_HOST');
-        $_path_docx     = 'http://' . $_url_scheme . '/reporting/' . PathReportingName::GENERATE_NOUVELLE_FEUILLE_CAISSE . $_filename . '.docx';
-        $_path_pdf      = 'http://' . $_url_scheme . '/reporting/' . PathReportingName::GENERATE_NOUVELLE_FEUILLE_CAISSE . $_filename . '.pdf';
-
-        $_php_word      = new PhpWord();
-        $_template      = $_php_word->loadTemplate($_template_src);
-
-        // Centre, lieu centre et numéro BL
-        $_template->setValue('centre', $_nom_centre);
-
-        switch($_lieu_centre){
-            case (preg_match('/alasora/i', $_lieu_centre) ? true : false) :
-                    $_template->setValue('lieu', 'ALASORA');break;
-            case (preg_match('/itinerante/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', str_replace('ITINERANTE ', '', $_lieu_centre));break;
-            default :
-                $_template->setValue('lieu', $_lieu_centre);break;
-        }
-
-        if(preg_match('/ALASORA/', $_lieu_centre)){
-            $_template->setValue('lieuedition', ucfirst(strtolower('ALASORA')));
-        }elseif(preg_match('/ITINERANTE/', $_lieu_centre)){
-            $_template->setValue('lieuedition', ucfirst(strtolower(str_replace('ITINERANTE ', '', $_lieu_centre))));
-        }elseif(preg_match('/VISITE A DOMICILE : /', $_lieu_centre)){
-            $_template->setValue('lieuedition', ucfirst(strtolower('ALAROBIA')));
-        }else{
-            $_template->setValue('lieuedition', ucfirst(strtolower($_lieu_centre)));
-        }
-        $_template->setValue('date', strtoupper(date('d').' '.$_list_mois[date('n')].' '.date('Y')));
-
-        $_imprimes_used = $this->getAllITUsedInDaybyCentre($_centre, $_date);
-        $_nb_imprimes_used = count($_imprimes_used);
-
-        $_nbr_crt = 0;
-        $_nbr_cbl = 0;
-        $_nbr_bbr = 0;
-        $_nbr_cjn = 0;
-        $_nbr_jbr = 0;
-        $_nbr_crg = 0;
-        $_nbr_cae = 0;
-        $_nbr_pch = 0;
-        $_nbr_cim31 = 0;
-        $_nbr_cim31b = 0;
-        $_nbr_cim32 = 0;
-        $_nbr_pvo = 0;
-        $_nbr_pvm = 0;
-        $_nbr_pcm = 0;
-        $_nbr_adm = 0;
-
-        $authenticite = 0;
-        $autres = 0;
-        $caracteristique = 0;
-        $constatation = 0;
-        $contre = 0;
-        $duplicata = 0;
-        $duplicatavt = 0;
-        $duplicatart = 0;
-        $mutation = 0;
-        $rebus = 0;
-        $reception = 0;
-        $visite = 0;
-        $special = 0;
-
-        $_i = 0;
-        $_k = 0;
-        $_list_imm_ct = [];
-
-        $_template->cloneRow('i', $_nb_imprimes_used);
-
-        foreach($_imprimes_used as $_imprime_used)
-        {
-            ++$_i;
-
-            // Récupérer tous les controles techniques
-            if(($_imprime_used->imm != '-') AND (!in_array($_imprime_used->imm, $_list_imm_ct))){
-                $_list_imm_ct[] = $_imprime_used->imm;
-                $_k++;
-            }
-
-            //Récupérer nombre des utilisation par catégories
-            $_imprime_used->used == 'Authenticité' ? $authenticite++ : $authenticite;
-            $_imprime_used->used == 'Autres' ? $autres++ : $autres;
-            $_imprime_used->used == 'Caractéristique' ? $caracteristique++ : $caracteristique;
-            $_imprime_used->used == 'Constatation' ? $constatation++ : $constatation;
-            $_imprime_used->used == 'Contre' ? $contre++ : $contre;
-            $_imprime_used->used == 'Duplicata' ? $duplicata++ : $duplicata;
-            $_imprime_used->used == 'Duplicata visite' ? $duplicatavt++ : $duplicatavt;
-            $_imprime_used->used == 'Duplicata réception' ? $duplicatart++ : $duplicatart;
-            $_imprime_used->used == 'Mutation' ? $mutation++ : $mutation;
-            $_imprime_used->used == 'Rebut' ? $rebus++ : $rebus;
-            $_imprime_used->used == 'Réception' ? $reception++ : $reception;
-            $_imprime_used->used == 'Visite' ? $visite++ : $visite;
-            $_imprime_used->used == 'Spéciale' ? $special++ : $special;
-
-            // Récuperer nombre des IT utilisés pour chaque type
-            $_imprime_used->ncrt    != '-' ? $_nbr_crt++ : $_nbr_crt;
-            $_imprime_used->ncbl    != '-' ? $_nbr_cbl++ : $_nbr_cbl;
-            $_imprime_used->nbbr    != '-' ? $_nbr_bbr++ : $_nbr_bbr;
-            $_imprime_used->ncjn    != '-' ? $_nbr_cjn++ : $_nbr_cjn;
-            $_imprime_used->njbr    != '-' ? $_nbr_jbr++ : $_nbr_jbr;
-            $_imprime_used->ncrg    != '-' ? $_nbr_crg++ : $_nbr_crg;
-            $_imprime_used->ncae    != '-' ? $_nbr_cae++ : $_nbr_cae;
-            $_imprime_used->plch    != '-' ? $_nbr_pch++ : $_nbr_pch;
-            $_imprime_used->ncim31  != '-' ? $_nbr_cim31++ : $_nbr_cim31;
-            $_imprime_used->ncim31b != '-' ? $_nbr_cim31b++:$_nbr_cim31b;
-            $_imprime_used->ncim32  != '-' ? $_nbr_cim32++:$_nbr_cim32;
-            $_imprime_used->npvo    != '-' ? $_nbr_pvo++ : $_nbr_pvo;
-            $_imprime_used->npvm    != '-' ? $_nbr_pvm++ : $_nbr_pvm;
-            $_imprime_used->npcm    != '-' ? $_nbr_pcm++ : $_nbr_pcm;
-            $_imprime_used->obs     != '-' ? $_nbr_adm++ : $_nbr_adm;
-
-            $_template->setValue('i#' . $_i, $_i);
-            $_template->setValue('ref#' . $_i, !preg_match_all('/Erreur/', $_imprime_used->ref) ? strtoupper($_imprime_used->ref):$_imprime_used->ref);
-            $_template->setValue('imm#' . $_i, $_imprime_used->imm);
-            $_template->setValue('used#' . $_i, $_imprime_used->used);
-            $_template->setValue('ncrt#' . $_i, $_imprime_used->ncrt);
-            $_template->setValue('ncbl#' . $_i, $_imprime_used->ncbl);
-            $_template->setValue('nbbr#' . $_i, $_imprime_used->nbbr);
-            $_template->setValue('ncjn#' . $_i, $_imprime_used->ncjn);
-            $_template->setValue('njbr#' . $_i, $_imprime_used->njbr);
-            $_template->setValue('ncrg#' . $_i, $_imprime_used->ncrg);
-            $_template->setValue('ncae#' . $_i, $_imprime_used->ncae);
-            $_template->setValue('plch#' . $_i, $_imprime_used->plch);
-            $_template->setValue('ncim31#' . $_i, $_imprime_used->ncim31);
-            $_template->setValue('ncim31b#' . $_i, $_imprime_used->ncim31b);
-            $_template->setValue('ncim32#' . $_i, $_imprime_used->ncim32);
-            $_template->setValue('npvo#' . $_i, $_imprime_used->npvo);
-            $_template->setValue('npvm#' . $_i, $_imprime_used->npvm);
-            $_template->setValue('npcm#' . $_i, $_imprime_used->npcm);
-            $_template->setValue('obs#' . $_i, $_imprime_used->obs);
-        }
-
-        $_template->setValue('nbr_ct', number_format($_k, 0, ',', ' '));
-
-        $_template->setValue('nbrcrt', number_format($_nbr_crt, 0, ',', ' '));
-        $_template->setValue('nbrcbl', number_format($_nbr_cbl, 0, ',', ' '));
-        $_template->setValue('nbrbbr', number_format($_nbr_bbr, 0, ',', ' '));
-        $_template->setValue('nbrcjn', number_format($_nbr_cjn, 0, ',', ' '));
-        $_template->setValue('nbrjbr', number_format($_nbr_jbr, 0, ',', ' '));
-        $_template->setValue('nbrcrg', number_format($_nbr_crg, 0, ',', ' '));
-        $_template->setValue('nbrcae', number_format($_nbr_cae, 0, ',', ' '));
-        $_template->setValue('nbrpch', number_format($_nbr_pch, 0, ',', ' '));
-        $_template->setValue('nbrcim31', number_format($_nbr_cim31, 0, ',', ' '));
-        $_template->setValue('nbrcim31', number_format($_nbr_cim31, 0, ',', ' '));
-        $_template->setValue('nbrcim31b', number_format($_nbr_cim31b, 0, ',', ' '));
-        $_template->setValue('nbrcim32', number_format($_nbr_cim32, 0, ',', ' '));
-        $_template->setValue('nbrpvo', number_format($_nbr_pvo, 0, ',', ' '));
-        $_template->setValue('nbrpvm', number_format($_nbr_pvm, 0, ',', ' '));
-        $_template->setValue('nbrpcm', number_format($_nbr_pcm, 0, ',', ' '));
-        $_template->setValue('nbobs', number_format($_nbr_adm, 0, ',', ' '));
-
-        $_template->setValue('aut', number_format($authenticite, 0, ',', ' '));
-        $_template->setValue('oth', number_format($autres, 0, ',', ' '));
-        $_template->setValue('ct', number_format($caracteristique, 0, ',', ' '));
-        $_template->setValue('cad', number_format($constatation, 0, ',', ' '));
-        $_template->setValue('con', number_format($contre, 0, ',', ' '));
-        $_template->setValue('dup', number_format($duplicata, 0, ',', ' '));
-        $_template->setValue('dupvt', number_format($duplicatavt, 0, ',', ' '));
-        $_template->setValue('duprt', number_format($duplicatart, 0, ',', ' '));
-        $_template->setValue('mut', number_format($mutation, 0, ',', ' '));
-        $_template->setValue('reb', number_format($rebus, 0, ',', ' '));
-        $_template->setValue('rt', number_format($reception, 0, ',', ' '));
-        $_template->setValue('vt', number_format($visite, 0, ',', ' '));
-        $_template->setValue('sp', number_format($special, 0, ',', ' '));
-
-        $_template->setValue('total', number_format($_i, 0, ',', ' '));
-        
-        // Date d'édition de la feuille de caisse
-        $_date_edition = date('d').' '.$_list_mois[date('n')].' '.date('Y').' à '. date('H:i:s');
-        $_date_edition2 = date('d').' '.$_list_mois[date('n')].' '.date('Y');
-        $_template->setValue('dateedition', $_date_edition2);
-        $_template->setValue('datedition', $_date_edition);
-
-        // Récupération nom de l'utilisateur éditeur de la feuille de caisse
-        $user_connected = $this->_container->get('security.token_storage')->getToken()->getUser();
-        $_operator = $user_connected->getUsrName();
-        $_template->setValue('operator', $_operator);
-
-        $_template->saveAs($_dest_tmp);
-
-        // Recuperer manager
-        $_srv_cad = $this->_container->get(ServiceName::SRV_METIER_CONST_AV_DED);
-        // Convertir en PDF
-        $_dest_tmp = $_srv_cad->convertToPdf($_path, $_file_without_ext);
-
-        return array(
-            'download_path' => $_dest_tmp,
-            /* 'url_path'      => $_path_docx */
-            'url_path'      => $_path_pdf
-        );
-    }
-
-    /**
-     *  Générer feuille de stock des imprimés
-     *  techniques d'un centre à une date données
-     *  @param $centre : Identifiant du centre à traité
-     *  @param $date : Date de l'établissement de la feuille de stock
-     *  @return array : array()
-     */
-    public function genererNewFeuilleStockIT($_centre, $_mois)
-    {
-        /* Récupérer manager */
-        $_centre_manager = $this->_container->get(ServiceName::SRV_METIER_CENTRE);
-        $_bordereau_manager = $this->_container->get(ServiceName::SRV_METIER_BORDEREAU);
-        $_em_imprimes = $this->_container->get(ServiceName::SRV_METIER_IMPRIME_TECH);
-        $_em_utilisations = $this->_container->get(ServiceName::SRV_METIER_IMPRIME_TECH_USE);
-
-        /* Initialisation des mois */
-        $_list_mois = array(1 => "janvier", 2 => "février", 3 => "mars", 4 => "avril", 5 => "mai", 6 => "juin", 7 => "juillet", 8 => "août", 9 => "septembre", 10 => "octobre", 11 => "novembre", 12 => "décembre");
-        $_mois_capt = array(1 => "JANVIER", 2 => "FEVRIER", 3 => "MARS", 4 => "AVRIL", 5 => "MAI", 6 => "JUIN", 7 => "JUILLET", 8 => "AOUT", 9 => "SEPTEMBRE", 10 => "OCTOBRE", 11 => "NOVEMBRE", 12 => "DECEMBRE");
-
-        /* Récupération de l'ID du centre de l'utlisateur connecté ou choisi */
-        if($_centre == 0) {
-            $_ct_user_id = $this->_container->get('security.token_storage')->getToken()->getUser();
-            $_centre = $_ct_user_id->getCtCentre();
-        }else{
-            $_centre = $_centre_manager->getCtCentreById($_centre);
-        }
-
-        $_ttt_mois = explode('-', $_mois);
-        $_mois_ttt = in_array((int) $_ttt_mois[1], array(4, 8, 10)) ? 'MOIS D\''.$_mois_capt[(int) $_ttt_mois[1]].' '.$_ttt_mois[0]:'MOIS DE '.$_mois_capt[(int) $_ttt_mois[1]].' '.$_ttt_mois[0];
-
-        /* Récupération informations chef de centre et lieu centre */
-        $_id_centre = $_centre->getId();
-        $_nom_centre = $_centre->getCtrNom();
-        $_code_centre = $_centre->getCtrCode();
-        $_code_province = $_centre->getCtProvince()->getPrvCode();
-
-        $_centre_formatted = $_bordereau_manager->transformcenter($_nom_centre);
-        $_lieu_centre = $_centre_formatted[1];
-        $_nom_centre = $_centre_formatted[2];
-
-        /* Récupérer répertoire modèle Word */
-        $_fuit_directory = $this->_container->getParameter('reporting_template_directory');
-        $_template_src = $_fuit_directory . PathReportingName::TEMPLATE_NOUVELLE_FEUILLE_STOCK_IT;
-        $_path = $_fuit_directory . PathReportingName::GENERATE_NOUVELLE_FEUILLE_STOCK_IT;
-
-        $_fichier = 'FEUILLE_STOCK_MENSUEL_IT_'.$_code_centre.'_'.$_code_province . '_' . preg_replace("![^a-z0-9]+!i", "_", $_mois_ttt);
-        $_filename = strtoupper($_fichier);
-
-        $_dest_tmp = $_path . $_filename . '.docx';
-        $_file_without_ext = $_filename;
-
-        $_url_scheme = $this->_container->get('request_stack')->getCurrentRequest()->server->get('HTTP_HOST');
-        $_path_docx = 'http://' . $_url_scheme . '/reporting/' . PathReportingName::GENERATE_NOUVELLE_FEUILLE_STOCK_IT . $_filename . '.docx';
-        $_path_pdf = 'http://' . $_url_scheme . '/reporting/' . PathReportingName::GENERATE_NOUVELLE_FEUILLE_STOCK_IT . $_filename . '.pdf';
-
-        $_php_word = new PhpWord();
-        $_template = $_php_word->loadTemplate($_template_src);
-
-        /* Automatisation dernière ligne des l'attache du feuille de stock */
-        $_template->setValue('centre', $_nom_centre);
-        switch($_lieu_centre){
-            case (preg_match('/alarobia/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', '');break;
-            case (preg_match('/alasora/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', 'ALASORA'. "\r\n" . '-----------------------');break;
-            case (preg_match('/VISITE A DOMICILE/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', 'ALAROBIA'. "\r\n" . '-----------------------');break;
-            case (preg_match('/itinerante/i', $_lieu_centre) ? true : false) :
-                $_template->setValue('lieu', str_replace('ITINERANTE ', '', $_lieu_centre). "\r\n" . '-----------------------');break;
-            default :
-                $_template->setValue('lieu', $_lieu_centre. "\r\n" . '-----------------------');break;
-        }
-
-        /* Régénération numéro du courrier */
-        $_numero = $this->genererNumeroCourrier($_code_centre);
-        $_template->setValue('numero', $_numero);
-
-        $_template->setValue('mois', $_mois);
-
-        $_titre = "SITUATION MENSUELLE DES IMPRIMES TECHNIQUES ".$_mois_ttt;
-        /* $_titre = "SITUATION MENSUELLE DES IMPRIMES TECHNIQUES ". "\r\n" .$_mois_ttt; */
-        $_template->setValue('titre', $_titre);
-
-        if(preg_match('/ALASORA/', $_lieu_centre)){
-            $_template->setValue('lieuedition', ucfirst(strtolower('ALASORA')));
-        }elseif(preg_match('/ITINERANTE/', $_lieu_centre)){
-            $_template->setValue('lieuedition', ucfirst(strtolower(str_replace('ITINERANTE ', '', $_lieu_centre))));
-        }elseif(preg_match('/VISITE A DOMICILE : /', $_lieu_centre)){
-            $_template->setValue('lieuedition', ucfirst(strtolower('ALAROBIA')));
-        }else{
-            $_template->setValue('lieuedition', ucfirst(strtolower($_lieu_centre)));
-        }
-
-        /* Etablissement sutiation de stock suivant type des imprimes existants */
-        $_imprimes = $_em_imprimes->getAllCtImprimeTechByOrder(['nomImprimeTech'=>'ASC']);
-        $_nimprime = count($_imprimes);
-        $_i = 0;
-        $_template->cloneRow('i', $_nimprime);
-        foreach($_imprimes as $_imprime){
-            ++$_i;
-            $_template->setValue('i#'.$_i, $_i);
-            $_template->setValue('imprime#'.$_i, $_imprime->getNomImprimeTech());
-            $_ct_imprime_tech_id = $_imprime->getId();
-            $_template->setValue('a#'.$_i, $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'BEFORE'));
-            $_template->setValue('b#'.$_i, $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'ENTRING'));
-            $_template->setValue('c#'.$_i, $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'DURING'));
-            $_template->setValue('d1#'.$_i, $this->getSumITUsedInMonthWithMotif($_id_centre, $_ct_imprime_tech_id, $_mois, 'Particulier'));
-            $_template->setValue('d2#'.$_i, $this->getSumITUsedInMonthWithMotif($_id_centre, $_ct_imprime_tech_id, $_mois, 'Administratif'));
-            $_template->setValue('d3#'.$_i, $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'REBUTS'));
-            $_template->setValue('d#'.$_i, $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'OUTING'));
-            $_template->setValue('e#'.$_i, $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'ENDING'));
-            $sd =   $this->getSumITUsedInMonthWithMotif($_id_centre, $_ct_imprime_tech_id, $_mois, 'Particulier') +
-                    $this->getSumITUsedInMonthWithMotif($_id_centre, $_ct_imprime_tech_id, $_mois, 'Administratif') + 
-                    $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'REBUTS');
-            $dd =   $this->getNombreITByConditions($_id_centre, $_mois, $_ct_imprime_tech_id, 'OUTING');
-            if(($sd != $dd)){
-                $_template->setValue('obs#'.$_i, "A vérifier l'écart de ".($dd - $sd)." IT.");
-            }else{
-                $_template->setValue('obs#'.$_i, "");
-            }
-        }
-
-        /* Récupération nom de l'utilisateur éditeur de la feuille de caisse */
-        $user_connected = $this->_container->get('security.token_storage')->getToken()->getUser();
-        $_operator = $user_connected->getUsrName();
-        $_template->setValue('operator', $_operator);
-
-        /* Etablissement date d'édition et de signature automatique */
-        $_date_edition = date('d').' '.$_list_mois[date('n')].' '.date('Y').' à '. date('H:i:s');
-        $_date_edition2 = date('d').' '.$_list_mois[date('n')].' '.date('Y');
-        $_template->setValue('dateedition', $_date_edition2);
-        $_template->setValue('datedition', $_date_edition);
-
-        $_template->saveAs($_dest_tmp);
-
-        /* Recuperer manager */
-        $_em_cad = $this->_container->get(ServiceName::SRV_METIER_CONST_AV_DED);
-        /* Convertir en PDF */
-        $_dest_tmp = $_em_cad->convertToPdf($_path, $_file_without_ext);
-
-        return array(
-            'download_path' => $_dest_tmp,
-            /* 'url_path'      => $_path_docx */
-            'url_path'      => $_path_pdf
-        );
-    }
-
-    /**
-     *  Fonction permettant de générer le n° d'un courrier d'un centre
-     *  @param $ctr_code : code centre
-     *  @return $_numero : numéro de courrier généré
-     */
-    public function genererNumeroCourrier($ctr_code)
-    {
-        switch($ctr_code){
-            case '001'  : $_numero = 'NR____________/CENSERO</ANT/'.date('y');break;
-            case '002'  : $_numero = 'NR____________/CENSERO/BLG/'.date('y');break;
-            case '003'  : $_numero = 'NR____________/CENSERO/NNA/'.date('y');break;
-            case '004'  : $_numero = 'NR____________/CENSERO/ALS/'.date('y');break;
-            case '005'  : $_numero = 'NR____________/CENSERO/TNA/'.date('y');break;
-            case '007'  : $_numero = 'NR____________/CENSERO/FNR/'.date('y');break;
-            case '008'  : $_numero = 'NR____________/CENSERO/TLR/'.date('y');break;
-            case '009'  : $_numero = 'NR____________/CENSERO/ANA/'.date('y');break;
-            case '010'  : $_numero = 'NR____________/CENSERO/IVT/'.date('y');break;
-            case '011'  : $_numero = 'NR____________/CENSERO/MVA/'.date('y');break;
-            case '013'  : $_numero = 'NR____________/CENSERO/TRO/'.date('y');break;
-            case '014'  : $_numero = 'NR____________/CENSERO/ABA/'.date('y');break;
-            case '015'  : $_numero = 'NR____________/CENSERO/ATR/'.date('y');break;
-            case '016'  : $_numero = 'NR____________/CENSERO/AKA/'.date('y');break;
-            case '017'  : $_numero = 'NR____________/CENSERO/FVE/'.date('y');break;
-            case '017'  : $_numero = 'NR____________/CENSERO/FVE/'.date('y');break;
-            case '018'  : $_numero = 'NR____________/CENSERO/MOG/'.date('y');break;
-            case '019'  : $_numero = 'NR____________/CENSERO/SVA/'.date('y');break;
-            case '020'  : $_numero = 'NR____________/CENSERO/MGA/'.date('y');break;
-            case '021'  : $_numero = 'NR____________/CENSERO/MRA/'.date('y');break;
-            case '022'  : $_numero = 'NR____________/CENSERO/FNA/'.date('y');break;
-            case '023'  : $_numero = 'NR____________/CENSERO/ABE/'.date('y');break;
-            case '024'  : $_numero = 'NR____________/CRT/ANT/'.date('y');break;
-            case '025'  : $_numero = 'NR____________/CENSERO/IHO/'.date('y');break;
-            case '026'  : $_numero = 'NR____________/CENSERO/ATH/'.date('y');break;
-            case '027'  : $_numero = 'NR____________/CENSERO/TDD/'.date('y');break;
-            case '029'  : $_numero = 'NR____________/CENSERO/NSB/'.date('y');break;
-            default     : $_numero = 'NR____________/DGSR/DOR/'.date('y');break;
-        }
-        return $_numero;
-    }
-    /**
-     *  Fonction permettant de recuperer le nombre de IT suivant les conditions
-     *  @param $_centre : ID du centre concerné
-     *  @param $_mois : Mois à traiter
-     *  @param $_used : Si l'imprimé technique est utilisé ou non
-     *  @param $_type_it : Type de l'imprimé technique
-     *  @param $_position : La position à traiter (avant, pendant, après)
-     *  @return $_nombre : Nombre d'imprimé technique trouvés
-     */
-    public function getNombreITByConditions($_centre, $_mois, $_type_it, $_position)
-    {
-        $_date = new \DateTime();
-        $_em_it = EntityName::CT_IMPRIME_TECH;
-        $_em_ctr = EntityName::CT_CENTRE;
-        $_em_itu = EntityName::CT_IMPRIME_TECH_USE;
-        $_nombre = 0;
-        $_debut = $_mois."-01";
-        $_final = new DateTimeImmutable($_debut);
-        $_final = $_final->modify('+1 month');
-        $_tmois = array('01','02','03','04','05','06','07','08','09','10','11','12');
-        $_tmttt = explode('-', $_mois);
-        $_mmttt = $_tmttt[0] . '-' . $_tmois[(int)$_tmttt[1] + 1];
-        $_volana = $_date->format('Y-n');
-        switch($_position){
-            /*  Valeur de A */
-            case 'BEFORE' :
-                $_dql = "SELECT COUNT(u.id) FROM $_em_itu u WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = 
-                        (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id)) AND u.ctImprimeTech = :ct_prt_tech AND
-                        u.activedAt < :debut_mois AND (u.ituUsed = 0 OR (u.ituUsed = 1 AND u.createdAt LIKE :mois))";
-                        $_query = $this->_entity_manager->createQuery($_dql);
-                        $_query->setParameter('ct_centre_id', $_centre);
-                        $_query->setParameter('ct_prt_tech', $_type_it);
-                        $_query->setParameter('debut_mois', $_debut);
-                        $_query->setParameter('mois', $_mois."%");
-                        break;
-            /* Valeur de B */
-            case 'ENTRING' :
-                $_dql = "SELECT COUNT(u.id) FROM $_em_itu u WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode =
-                        (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id)) AND u.ctImprimeTech = :ct_prt_tech AND
-                        u.activedAt LIKE :mois AND (u.ituUsed = 1 OR  u.ituUsed = 0)";
-                        $_query = $this->_entity_manager->createQuery($_dql);
-                        $_query->setParameter('ct_centre_id', $_centre);
-                        $_query->setParameter('ct_prt_tech', $_type_it);
-                        $_query->setParameter('mois', $_mois."%");
-                        break;
-            /* Valeur de C = A + B */
-            case 'DURING' :
-                $_dql = "SELECT COUNT(u.id) FROM $_em_itu u WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = 
-                        (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id)) AND u.ctImprimeTech = :ct_prt_tech AND
-                        ((u.activedAt < :debut_mois AND (u.ituUsed = 0 OR (u.ituUsed = 1 AND u.createdAt LIKE :mois))) OR 
-                        (u.activedAt LIKE :mois AND (u.ituUsed = 1 OR  u.ituUsed = 0)))";
-                        $_query = $this->_entity_manager->createQuery($_dql);
-                        $_query->setParameter('ct_centre_id', $_centre);
-                        $_query->setParameter('ct_prt_tech', $_type_it);
-                        $_query->setParameter('debut_mois', $_debut);
-                        $_query->setParameter('mois', $_mois."%");
-                        break;
-            /* Valeur de D = D1 + D2 + D3 */
-            case 'OUTING' :
-                $_dql = "SELECT COUNT(u.id) FROM $_em_itu u WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = 
-                        (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id) AND u.ctImprimeTech = :ct_prt_tech AND
-                        u.createdAt LIKE :mois AND u.ituUsed = 1)";
-                        $_query = $this->_entity_manager->createQuery($_dql);
-                        $_query->setParameter('ct_centre_id', $_centre);
-                        $_query->setParameter('ct_prt_tech', $_type_it);
-                        $_query->setParameter('mois', $_mois."%");
-                        break;
-            /* Valeur de D3 */
-            case 'REBUTS' :
-                $_dql = "SELECT COUNT(u.id) FROM $_em_itu u WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = 
-                        (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id) AND u.ctImprimeTech = :ct_prt_tech AND
-                        u.createdAt LIKE :mois AND u.ituUsed = 1 AND u.ituMotifUsed = 'Rebut')";
-                        $_query = $this->_entity_manager->createQuery($_dql);
-                        $_query->setParameter('ct_centre_id', $_centre);
-                        $_query->setParameter('ct_prt_tech', $_type_it);
-                        $_query->setParameter('mois', $_mois."%");
-                        break;
-            /* Valeur de E = C - D */
-            case 'ENDING' :
-                $_dql = "SELECT COUNT(u.id) FROM $_em_itu u WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = 
-                        (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id)) AND u.ctImprimeTech = :ct_prt_tech AND
-                        u.activedAt < :final AND (u.ituUsed = 0 OR (u.ituUsed = 1 AND u.createdAt >= :final))";
-                        $_query = $this->_entity_manager->createQuery($_dql);
-                        $_query->setParameter('ct_centre_id', $_centre);
-                        $_query->setParameter('ct_prt_tech', $_type_it);
-                        // $_query->setParameter('debut_mois', $_debut);
-                        $_query->setParameter('final', $_final);
-                        // $_query->setParameter('mois_after', $_mmttt.'%');
-                        break;
-        }
-
-        $_nombre = $_query->getSingleScalarResult();
-
-        return $_nombre;
-    }
-
-    /**
-     *  Fonction recupérant le nombre des IT vendus durant un mois
-     */
-    public function getSumITUsedInMonthWithMotif($_centre, $_type_it, $_mois, $_admn)
-    {
-        /* Initialisation des entities */
-        $_em_ctr= EntityName::CT_CENTRE;
-        $_em_itu= EntityName::CT_IMPRIME_TECH_USE;
-        $_em_vt = EntityName::CT_VISITE;
-        $_em_rt = EntityName::CT_RECEPTION;
-        $_em_cad= EntityName::CT_CONST_AV_DED;
-        $_em_uti= EntityName::CT_UTILISATION;
-        /* Récupération nombre IT utilisés pour les Spéciales */
-        if($_admn == 'Particulier'){
-            $_dql_other = "SELECT COUNT(u.id) FROM $_em_itu u WHERE u.ctCentre IN(SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id))
-                    AND u.ituUsed = :utilise AND u.ctImprimeTech = :type_it AND u.createdAt LIKE :mois AND (u.ituMotifUsed = 'Authenticité' OR u.ituMotifUsed = 'Autres' OR u.ituMotifUsed = 'Caractéristique'
-                    OR u.ituMotifUsed = 'Duplicata' OR  u.ituMotifUsed = 'Duplicata visite' OR  u.ituMotifUsed = 'Duplicata réception' OR  u.ituMotifUsed = 'Duplicata réception' OR  u.ituMotifUsed = 'Mutation'
-                    OR  u.ituMotifUsed = 'Spéciale')";
-            $_query = $this->_entity_manager->createQuery($_dql_other);
-            $_query->setParameter('ct_centre_id', $_centre);
-            $_query->setParameter('utilise', 1);
-            $_query->setParameter('type_it', $_type_it);
-            $_query->setParameter('mois', $_mois.'%');
-            $_nombre_other = $_query->getSingleScalarResult();
-        }else{
-            $_nombre_other = 0;
-        }
-        /* Récupérer nombre IT utilisés pour visite technique */
-        $_dql_vt = "SELECT COUNT(u.id) FROM $_em_itu u INNER JOIN $_em_vt v WITH v.id = u.ctControle INNER JOIN $_em_uti ut WITH ut.id = v.ctUtilisation
-                    WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id))
-                    AND u.ituUsed = :utilise AND u.ctImprimeTech = :type_it  AND u.createdAt LIKE :mois AND (u.ituMotifUsed = 'Visite' OR u.ituMotifUsed = 'Contre') AND ut.utLibelle = :motif";
-        $_query_vt = $this->_entity_manager->createQuery($_dql_vt);
-        $_query_vt->setParameter('ct_centre_id', $_centre);
-        $_query_vt->setParameter('utilise', 1);
-        $_query_vt->setParameter('type_it', $_type_it);
-        $_query_vt->setParameter('mois', $_mois.'%');
-        $_query_vt->setParameter('motif', $_admn);
-        $_nombre_vt = $_query_vt->getSingleScalarResult();
-        /* Récupérer nombre IT utilisés pour réception technique  */
-        $_dql_rt = "SELECT COUNT(u.id) FROM $_em_itu u INNER JOIN $_em_vt v WITH v.id = u.ctControle INNER JOIN $_em_uti ut WITH ut.id = v.ctUtilisation
-                    WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id))
-                    AND u.ituUsed = :utilise AND u.ctImprimeTech = :type_it  AND u.createdAt LIKE :mois AND u.ituMotifUsed = 'Réception' AND ut.utLibelle = :motif";
-        $_query_rt = $this->_entity_manager->createQuery($_dql_rt);
-        $_query_rt->setParameter('ct_centre_id', $_centre);
-        $_query_rt->setParameter('utilise', 1);
-        $_query_rt->setParameter('type_it', $_type_it);
-        $_query_rt->setParameter('mois', $_mois.'%');
-        $_query_rt->setParameter('motif', $_admn);
-        $_nombre_rt = $_query_rt->getSingleScalarResult();
-        /* Récupérer nombre IT utilisés pour constatation avant dedouanement */
-        $_dql_cad = "SELECT COUNT(u.id) FROM $_em_itu u INNER JOIN $_em_vt v WITH v.id = u.ctControle INNER JOIN $_em_uti ut WITH ut.id = v.ctUtilisation
-                    WHERE u.ctCentre IN (SELECT c.id FROM $_em_ctr c WHERE c.ctrCode = (SELECT cc.ctrCode FROM $_em_ctr cc WHERE cc.id = :ct_centre_id))
-                    AND u.ituUsed = :utilise AND u.ctImprimeTech = :type_it  AND u.createdAt LIKE :mois AND u.ituMotifUsed = 'Constatation'"; /* AND ut.utLibelle = :motif */
-        $_query_cad = $this->_entity_manager->createQuery($_dql_cad);
-        $_query_cad->setParameter('ct_centre_id', $_centre);
-        $_query_cad->setParameter('utilise', 1);
-        $_query_cad->setParameter('type_it', $_type_it);
-        $_query_cad->setParameter('mois', $_mois.'%');
-        $_nombre_cad = $_query_cad->getSingleScalarResult();
-        // $_nombre = $_nombre_au + $_nombre_ot + $_nombre_ca + $_nombre_du + $_nombre_dv + $_nombre_dr + $_nombre_mu + $_nombre_sp + $_nombre_vt + $_nombre_rt + $_nombre_cad ;
-        $_nombre = $_nombre_other + $_nombre_vt + $_nombre_rt + $_nombre_cad ;
-        return $_nombre;
-    }
 
     /**
      *  Fonction permettant de recupérer l'ID d'un controle pour un centre
@@ -2333,6 +1682,30 @@ class ServiceMetierCtImprimeTechUse
         return $_controle_id;
     }
 
+
+    /**
+     *  Fonction permettant de tester un numéro d'imprimée technique s'il existe déjà ou non
+     *  @param $_imprime_tech_id : ID imprimée technique à tester
+     *  @param $_ct_controle_id : ID controle technique à tester
+     *  @return $_trouve (boolean)
+     */
+    public function getITUByITAndControleId($_imprime_tech_id, $_ct_controle_id)
+    {
+        $_entity_itu = EntityName::CT_IMPRIME_TECH_USE;
+        $_trouve = false;
+        $_sql    = "SELECT COUNT(u.id)
+                    FROM    $_entity_itu u 
+                    WHERE   u.ctImprimeTech = :ct_imprimetech_id
+                            AND u.ctControle != :ct_controle_id";
+        $_query  = $this->_entity_manager->createQuery($_sql);
+        $_query->setParameter('ct_imprimetech_id', $_imprime_tech_id);
+        $_query->setParameter('ct_controle_id', $_ct_controle_id);
+        // $_ret = $_query->getResult();
+        // $_nombre = count($_ret);
+        $_nombre = $_query->getSingleScalarResult();
+        if($_nombre != 0) $_trouve = true;
+        return $_trouve;
+    }
     
     /**
      * Récuperer tout les visites par centre à une date et non enregistrés dans utilisations IT
@@ -2371,4 +1744,5 @@ class ServiceMetierCtImprimeTechUse
         $_query->setParameter('date'    , $_date.'%');
         return $_query->getResult();
     }
+
 }

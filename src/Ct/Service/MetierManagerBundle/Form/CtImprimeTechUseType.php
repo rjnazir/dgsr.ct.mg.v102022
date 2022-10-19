@@ -103,8 +103,13 @@ class CtImprimeTechUseType extends AbstractType
                     'Duplicata' => ['disabled' => true],
                 ],
                 'placeholder'   => '- Sélectionner motif d\'utilisation -'
-            ]
-        );
+            ])
+            ->add('ituUsed', TextType::class, array(
+                'label'    => "Est-utilisé",
+                'required' => false,
+                'disabled' => false,
+            ))
+            ;
     }
     
     /**
